@@ -1,5 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+<<<<<<< HEAD
+  content: ["./src/**/*.{html,js,jsx}"],
+    theme: {
+=======
   darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
@@ -16,6 +20,7 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+>>>>>>> origin/main
     extend: {
       colors: {
         border: "hsl(var(--border))",
