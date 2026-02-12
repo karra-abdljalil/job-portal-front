@@ -57,3 +57,6 @@
     @apply bg-background text-foreground;
   }
 }
+.form-label {
+  @apply mb-2 text-sm text-gray-500;
+}

@@ -26,7 +26,7 @@ export const Profil = ({
 
         {/* Right: action button */}
         <ButtonRedirect
-          link="-"
+          link="/register"
           buttonName={buttonName_button}
           style={styleButton}
         />
