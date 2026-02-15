@@ -1,11 +1,20 @@
-import {useNavigate } from 'react-router-dom'
-export const ButtonRedirect=({link,buttonName,style})=>{
-    const navigate = useNavigate()
+import { Button } from "../../ui/button";
+import { useNavigate } from "react-router-dom";
 
-    const handleClick= ()=>{
-        navigate(link)
-    }
-    return (
-        <button onClick={handleClick} className={style}>{buttonName}</button>
-    )
-}
+export const ButtonRedirect = ({ link, buttonName, variant , size  }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(link);
+  };
+
+  return (
+    <Button
+      onClick={handleClick}
+      variant={variant} 
+      size={size}       
+    >
+      {buttonName}
+    </Button>
+  );
+};

@@ -16,6 +16,9 @@ const buttonVariants = cva(
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        detailButtom:"bg-slate-300 hover:bg-slate-400 text-slate-950 px-4 rounded-xl transition-colors duration-200 capitalize",
+interviewDetail:
+"bg-fuchsia-600 hover:bg-fuchsia-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

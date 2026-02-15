@@ -1,5 +1,5 @@
 import { PublicHeader } from "../common/Headers/PublicHeader";
-import { Profil } from "../common/Profil";
+import { Profil } from "../layouts/Profil";
 import jobIcon from "../../assets/searchjob.png";
 import employeerIcon from "../../assets/job.png";
 
