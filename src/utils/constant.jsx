@@ -24,4 +24,14 @@ export const APPLICATION_STATUS = {
     bg: '#ff9c94a8',
     text: '#F44336',
   },
+  DECLINED: {
+    value: 'declined',
+    bg: '#F44336',
+    text: '#ffffff',
+  },
+  ACCEPTED: {
+    value: 'accepted',
+    bg: '#22ba00',
+    text: '#ffffff',
+  },
 };

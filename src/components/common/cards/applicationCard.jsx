@@ -20,7 +20,7 @@ export default function ApplicationCard({ application }) {
   const StatusComponent = STATUS_COMPONENTS[application.status];
 
   return (
-    <Card className="w-full rounded-2xl hover:shadow-md transition-all duration-300 m-4 py-2 px-4">
+    <Card className=" rounded-2xl hover:shadow-md transition-all duration-300 m-4 py-2 px-4 bg-white">
       <CardContent className="p-4 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
