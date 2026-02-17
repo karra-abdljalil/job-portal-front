@@ -144,20 +144,20 @@ export const Register = () => {
 
         {/* JOB SEEKER */}
         {role === ROLES.JOB_SEEKER && (
-          // <div>
-          //   <label className="text-sm">
-          //     Upload CV
-          //   </label>
-          //   <input
-          //     type="file"
-          //     accept=".pdf,.doc,.docx"
-          //     onChange={(e) =>
-          //       setCvFile(e.target.files[0])
-          //     }
-          //     className="w-full"
-          //   />
-          // </div>
-          <UploadCv/>
+     
+          <div className={` text-center border-2 border-dashed p-6 rounded-lg relative transition-colors`}>
+            <p className="text-gray-500">Drag & drop your CV here or click to select a file</p>
+          <input
+            type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={(e) =>
+                setCvFile(e.target.files[0])
+              }
+            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+          />
+
+          </div>
+          // <UploadCv/>
         )}
 
         {/* EMPLOYER */}
