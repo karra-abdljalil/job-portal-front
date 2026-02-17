@@ -47,7 +47,7 @@ export const Register = () => {
       data.append("full_name", form.full_name);
       data.append("email", form.email);
       data.append("password", form.password);
-    data.append("repeat_password", form.repeat_password);
+      data.append("repeat_password", form.repeat_password);
       data.append("role", role);
 
       // Role-based fields

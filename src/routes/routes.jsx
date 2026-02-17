@@ -4,10 +4,13 @@ import MyApplicationsPage from "@/pages/JobSeeker/MyApplications";
 import { UploadCv } from "../pages/CVComponents/UploadCv";
 import { Login } from "@/pages/auth/Login";
 import { Register } from "@/pages/auth/Register";
+import {MagicLinkPageValidation} from "@/pages/auth/MagicLinkPageValidation"
 import { ProtectedRoute } from "./ProtectedRoute";
 import { GuestRoute } from "./GuestRoute";
 import { NotFoundPage } from "@/pages/system/NotFoundPage";
-import { ADMIN, JOB_SEEKER, EMPLOYER } from "@/constants/userRole";
+import {ADMIN,JOB_SEEKER,EMPLOYER} from "@/constants/userRole"
+import { ForgotPassword } from "@/pages/auth/ForgotPassword";
+import { ResetPassword } from "@/pages/auth/ResetPassword";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -52,6 +55,27 @@ export default function AppRoutes() {
         }
       />
       <Route path="/*" element={<NotFoundPage />} />
+      <Route path="/" element={<Publicpage/>} />
+      <Route path="/login" element={
+                <GuestRoute>
+                    <Login/>
+                 </GuestRoute>
+          }/>
+      <Route path="/register" element={
+        <GuestRoute>
+            <Register/>
+        </GuestRoute>
+        } />
+        <Route path="/forgot-password" element={
+        <GuestRoute>
+            <ForgotPassword/>
+        </GuestRoute>
+        } />
+      <Route path="/verify-email" element={
+          <MagicLinkPageValidation />
+        } />
+      <Route path="/reset-password/:id/:token" element={<ResetPassword/>}/>
+    <Route path="/*" element={<NotFoundPage/>} />
     </Routes>
   );
 }
