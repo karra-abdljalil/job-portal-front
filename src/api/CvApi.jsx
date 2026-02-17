@@ -1,8 +1,7 @@
-import axios from "axios";
-const API_BASE_URL = "http://localhost:5000/api/cv";
+import apiClient from "@/services/api";
 
 export const UploadCv = async (formatDate, id) => {
-  return axios.post(`${API_BASE_URL}/upload/${id}`, formatDate, {
+  return apiClient.post(`api/cv/upload`, formatDate, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -11,7 +10,7 @@ export const UploadCv = async (formatDate, id) => {
 
 export const getCv_JobSeeker = async (id) => {
   try {
-    const response = axios.get(`${API_BASE_URL}/my-Cvs/${id}`);
+    const response = apiClient.get(`api/cv/my-Cvs`);
     return response;
   } catch (error) {
     throw error.message;

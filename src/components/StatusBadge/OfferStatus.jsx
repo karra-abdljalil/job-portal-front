@@ -7,6 +7,7 @@ export default function OfferStatus({ application }) {
   const dispatch = useDispatch();
   const {toast} = useToast()
  
+  const previousStatus = application.status
   // Determine if a decision has already been made
   const decisionMade = application.status === "accepted" || application.status === "declined";
 
@@ -25,6 +26,7 @@ export default function OfferStatus({ application }) {
       })
     })
     .catch((err) => {
+      dispatch(optimisticUpdate({ id: application.id, status: previousStatus }));
       toast({
         title:'Something went wrong',
         description:'Failed to send email.Please try again',

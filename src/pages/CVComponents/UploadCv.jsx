@@ -1,8 +1,8 @@
-import { uploadCvThunk } from "../../../Redux/cvSlice";
-import { useToast } from "../../../hooks/use-toast";
+import { uploadCvThunk } from "../../Redux/cvSlice";
+import { useToast } from "../../hooks/use-toast";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button } from "../../ui/button";
+import { Button } from "../../components/ui/button";
 
 export const UploadCv = () => {
   const dispatch = useDispatch();

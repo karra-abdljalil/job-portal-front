@@ -1,12 +1,12 @@
 import { Card, CardContent } from "../../ui/card";
-import { formatDate, formatRelativeDate } from "../../../utils/function";
+import { formatDate, formatRelativeDate } from "../../../constants/function";
 import { AppliedStatus } from "../../StatusBadge/AppliedStatus";
 import { UnderReviewStatus } from "../../StatusBadge/UnderReviewStatus";
 import { InterviewStatus } from "../../StatusBadge/InterviewStatus";
 import OfferStatus from "../../StatusBadge/OfferStatus";
 import RejectedStatus from "../../StatusBadge/RejectedStatus";
 import StatusBadge from "../../StatusBadge/statusBadge";
-import { APPLICATION_STATUS } from "../../../utils/constant";
+import { APPLICATION_STATUS } from "../../../constants/StatusConstant";
 
 export default function ApplicationCard({ application }) {
   const STATUS_COMPONENTS = {

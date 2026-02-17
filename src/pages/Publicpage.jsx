@@ -1,7 +1,7 @@
-import { PublicHeader } from "../common/Headers/PublicHeader";
-import { Profil } from "../layouts/Profil";
-import jobIcon from "../../assets/searchjob.png";
-import employeerIcon from "../../assets/job.png";
+import { PublicHeader } from "@/components/common/Headers/PublicHeader";
+import { Profil } from "@/components/layouts/Profil";
+import jobIcon from "@/assets/searchjob.png";
+import employeerIcon from "@/assets/job.png";
 
 export const Publicpage = () => {
   const listJob = [

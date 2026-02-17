@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyApplications } from "../../../Redux/applicationSlice";
-import ApplicationCard from "../../common/cards/applicationCard";
-import { ApplicationHeader } from "../../common/Headers/ApplicationHeader";
-import useDebounce from "../../../hooks/useDebounce";
-import StatusCard from "../../common/cards/statusCard";
+import { fetchMyApplications } from "../../Redux/applicationSlice";
+import ApplicationCard from "../../components/common/cards/applicationCard";
+import { ApplicationHeader } from "../../components/common/Headers/ApplicationHeader";
+import useDebounce from "../../hooks/useDebounce";
+import StatusCard from "../../components/common/cards/statusCard";
 
 export default function MyApplicationsPage() {
   const dispatch = useDispatch();
@@ -21,13 +21,11 @@ export default function MyApplicationsPage() {
   const limit = 10;
   const [debouncedSearch, cancelDebounce] = useDebounce(search.trim(), 500);
 
-  // for the test
-  const userId = "59d04c22-9d7c-4be5-8f61-16da54552bbe";
 
   useEffect(() => {
     if (debouncedSearch.length < 3 && debouncedSearch !== "") return;
     dispatch(
-      fetchMyApplications({ userId, search: debouncedSearch, page, limit }),
+      fetchMyApplications({ search: debouncedSearch, page, limit }),
     );
     return () => cancelDebounce();
   }, [dispatch, debouncedSearch, page]);

@@ -1,4 +1,4 @@
-import { APPLICATION_STATUS } from "../../utils/constant";
+import { APPLICATION_STATUS } from "../../constants/StatusConstant";
 
 export default function StatusBadge({ status }) {
  

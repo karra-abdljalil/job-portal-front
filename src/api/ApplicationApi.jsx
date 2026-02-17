@@ -1,36 +1,22 @@
-import axios from "axios";
-
-const API_BASE_URL = "http://localhost:5000/api/applications";
-
-// get app as job seeker
+import apiClient from '@/services/api'
+// get all apps for a jobseeker
 export const getMyApplications_JobSeeker = async (
-  userId,
   search = "",
   page = 1,
-  limit = 10,
+  limit = 10
 ) => {
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/myApplications/${userId}?search=${search}&page=${page}&limit=${limit}`,
-    );
-    return response.data;
-  } catch (err) {
-    throw err.response?.data || err.message;
-  }
-};
+  const response = await apiClient.get(
+    `api/applications/myApplications?search=${search}&page=${page}&limit=${limit}`
+  );
 
-// send the decision
+  return response.data;
+};
+// decision of the offer
 export const decideOffer = async (appId, decision) => {
-  try {
-    const res = await axios.post(
-      `${API_BASE_URL}/${appId}/decision`,
-      { decision },
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    return res;
-  } catch (err) {
-    throw err.res || err.message;
-  }
+  const response = await apiClient.post(
+    `api/applications/${appId}/decision`,
+    { decision }
+  );
+
+  return response.data;
 };

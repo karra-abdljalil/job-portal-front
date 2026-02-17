@@ -6,9 +6,9 @@ import {
 
 export const fetchMyApplications = createAsyncThunk(
   "applications/fetchMyApplications",
-  async ({ userId, search, page = 1, limit = 10 }, { rejectWithValue }) => {
+  async ({ search, page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      return await getMyApplications_JobSeeker(userId, search, page, limit);
+      return await getMyApplications_JobSeeker(search, page, limit);
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
@@ -24,7 +24,7 @@ export const decideOfferThunk = createAsyncThunk(
   async ({ appId, decision }, { rejectWithValue }) => {
     try {
       const res = await decideOffer(appId, decision);
-      return res.data.updateApplication;
+      return res.updateApplication;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||

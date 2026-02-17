@@ -1,4 +1,4 @@
-import { formatRelativeDate } from "../../utils/function";
+import { formatRelativeDate } from "../../constants/function";
 import { ButtonRedirect } from "../common/Ui/ButtonRedirect";
 
 export const UnderReviewStatus = ({ application }) => {

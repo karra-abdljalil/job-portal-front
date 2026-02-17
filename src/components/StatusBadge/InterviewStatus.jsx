@@ -1,4 +1,4 @@
-import { formatDate } from "../../utils/function";
+import { formatDate } from "../../constants/function";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import InterviewDetailsModal from "../Modal/interviewDetails";
