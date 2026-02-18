@@ -33,7 +33,7 @@ export const Login = () => {
 
     apiClient.post("/api/auth/login", form)
     .then((res) => {
-      navigate("/dashboard");
+      navigate("/apps");
     })
     .catch((err) => {
       setError(err.message);

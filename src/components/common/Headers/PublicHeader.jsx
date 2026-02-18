@@ -5,7 +5,6 @@ export const PublicHeader = () => {
   return (
     <header className="w-full bg-white shadow-sm px-6 py-4 flex items-center justify-between">
       
-      {/* Left: Logo + App Name */}
       <div className="flex items-center gap-3">
         <img
           src={jobIcon}
@@ -17,7 +16,6 @@ export const PublicHeader = () => {
         </span>
       </div>
 
-      {/* Right: Action buttons */}
       <div className="flex items-center gap-4">
         <ButtonRedirect
           link={"/login"}

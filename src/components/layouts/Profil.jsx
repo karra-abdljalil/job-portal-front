@@ -1,4 +1,4 @@
-import { ButtonRedirect } from "./Ui/ButtonRedirect";
+import { ButtonRedirect } from "../common/Ui/ButtonRedirect";
 
 export const Profil = ({
   src,
