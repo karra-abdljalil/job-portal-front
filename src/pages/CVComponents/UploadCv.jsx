@@ -1,4 +1,4 @@
-import { uploadCvThunk } from "../../Redux/cvSlice";
+import { uploadCvThunk,fetchMyCvs } from "../../Redux/cvSlice";
 import { useToast } from "../../hooks/use-toast";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -9,8 +9,7 @@ export const UploadCv = () => {
   const { toast } = useToast();
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
-  const [uploading ,setUploading] = useState(false)
-  const [progress,setProgress] = useState(0)
+
 
   const validateFile = (file) => {
     const allowedExtensions = [".pdf", ".doc", ".docx"];
@@ -70,18 +69,14 @@ export const UploadCv = () => {
     const formData = new FormData();
     formData.append("cv_file", file);
 
-    // for the test
-    const id = "59d04c22-9d7c-4be5-8f61-16da54552bbe";
     try {
-        await dispatch(uploadCvThunk({ formData, id })).unwrap()
+        await dispatch(uploadCvThunk({ formData })).unwrap()
        toast({title: "Success",description: "Cv uploaded successfully",variant: "success",});
         setFile(null);
 
+        dispatch(fetchMyCvs());
     } catch (error) {
         toast({ title: "Upload failed",variant: "destructive",});
-    }finally{
-        setUploading(false)
-        setProgress(0)
     }
   };
 
@@ -108,20 +103,11 @@ export const UploadCv = () => {
             className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
             onChange={(e) => handleFile(e.target.files[0])}
           />
-       
-
-        {uploading && (
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-            <div
-              className="bg-blue-500 h-2 rounded-full"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        )}
+    
          </div>
 
-        <Button type="submit" disabled={uploading} className="mt-4 w-full">
-          {uploading ? "Uploading..." : "Upload CV"}
+        <Button type="submit" className="mt-4 w-full">
+         Upload CV
         </Button>
       </form>
     </section>

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "../../ui/card";
 import { formatDate, formatRelativeDate } from "../../../constants/function";
 import { AppliedStatus } from "../../StatusBadge/AppliedStatus";
-import { UnderReviewStatus } from "../../StatusBadge/UnderReviewStatus";
+import { ReviewedStatus } from "../../StatusBadge/ReviewedStatus";
 import { InterviewStatus } from "../../StatusBadge/InterviewStatus";
 import OfferStatus from "../../StatusBadge/OfferStatus";
 import RejectedStatus from "../../StatusBadge/RejectedStatus";
@@ -11,7 +11,7 @@ import { APPLICATION_STATUS } from "../../../constants/StatusConstant";
 export default function ApplicationCard({ application }) {
   const STATUS_COMPONENTS = {
     [APPLICATION_STATUS.APPLIED.value]: AppliedStatus,
-    [APPLICATION_STATUS.UNDER_REVIEW.value]: UnderReviewStatus,
+    [APPLICATION_STATUS.REVIEWED.value]: ReviewedStatus,
     [APPLICATION_STATUS.INTERVIEW.value]: InterviewStatus,
     [APPLICATION_STATUS.OFFER.value]: OfferStatus,
     [APPLICATION_STATUS.REJECTED.value]: RejectedStatus,

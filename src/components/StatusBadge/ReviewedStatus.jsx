@@ -1,7 +1,7 @@
 import { formatRelativeDate } from "../../constants/function";
 import { ButtonRedirect } from "../common/Ui/ButtonRedirect";
 
-export const UnderReviewStatus = ({ application }) => {
+export const ReviewedStatus = ({ application }) => {
   return (
     <div className="flex items-center justify-between bg-muted/40">
       

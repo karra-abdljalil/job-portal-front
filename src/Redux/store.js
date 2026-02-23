@@ -5,7 +5,7 @@ import cvReducer from "./cvSlice";
 export const store = configureStore({
   reducer: {
     applications: applicationsReducer,
-    cvs:cvReducer
+    cv:cvReducer
   },
 });
 
