@@ -1,5 +1,5 @@
 import { uploadCvThunk,fetchMyCvs } from "../../Redux/cvSlice";
-import { useToast } from "../../hooks/use-toast";
+import { useToast } from "../../components/hooks/use-toast";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "../../components/ui/button";

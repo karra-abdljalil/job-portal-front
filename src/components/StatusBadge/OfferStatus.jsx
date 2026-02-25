@@ -2,7 +2,7 @@ import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { decideOfferThunk, optimisticUpdate } from "../../Redux/applicationSlice";
 import StatusBadge from "./statusBadge";
-import { useToast } from "../../hooks/use-toast";
+import { useToast } from "../hooks/use-toast";
 export default function OfferStatus({ application }) {
   const dispatch = useDispatch();
   const {toast} = useToast()

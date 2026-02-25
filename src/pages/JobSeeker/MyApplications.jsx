@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMyApplications } from "../../Redux/applicationSlice";
 import ApplicationCard from "../../components/common/cards/applicationCard";
 import { ApplicationHeader } from "../../components/common/Headers/ApplicationHeader";
-import useDebounce from "../../hooks/useDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import StatusCard from "../../components/common/cards/statusCard";
 
 export default function MyApplicationsPage() {

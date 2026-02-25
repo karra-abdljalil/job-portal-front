@@ -1,7 +1,7 @@
 import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 
-export const ButtonRedirect = ({ link, buttonName, variant , size  }) => {
+export const ButtonRedirect = ({ link, buttonName, style }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -11,8 +11,7 @@ export const ButtonRedirect = ({ link, buttonName, variant , size  }) => {
   return (
     <Button
       onClick={handleClick}
-      variant={variant} 
-      size={size}       
+      className={style}      
     >
       {buttonName}
     </Button>

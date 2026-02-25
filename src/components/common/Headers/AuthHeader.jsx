@@ -1,5 +1,4 @@
 import jobIcon from "../../../assets/searchjob.png";
-import apiClient from "@/services/api";
 export const AuthHeader = () => {
 
   return (

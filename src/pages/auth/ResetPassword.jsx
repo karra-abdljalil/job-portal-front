@@ -1,5 +1,5 @@
 import { AuthHeader } from "@/components/common/Headers/AuthHeader";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import apiClient from "@/services/api";
 import jobIcon from "@/assets/job.png";

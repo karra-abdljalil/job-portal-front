@@ -1,4 +1,5 @@
 import {useAuth} from "@/contexts/AuthContext"
+import { Login } from "@/pages/auth/Login";
 import { Forbidden } from "@/pages/system/Forbidden";
 
 import Loading from "@/pages/system/Loading";
@@ -10,7 +11,7 @@ export const ProtectedRoute = ({role, children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Forbidden />;
+    return <Login />;
   }
    if (!role.includes(user?.role)) {
     return <Forbidden />;
