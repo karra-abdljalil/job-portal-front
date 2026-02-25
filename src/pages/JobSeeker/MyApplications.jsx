@@ -40,7 +40,7 @@ export default function MyApplicationsPage() {
     { title: "total", value: counts.total_app, color: "blue-800" },
     { title: "rejected", value: counts.rejected_app, color: "red-600" },
     { title: "Interviews", value: counts.interview_app, color: "fuchsia-600" },
-    { title: "under-review", value: counts.underReview_app, color: "orange-600" },
+    { title: "reviewed", value: counts.underReview_app, color: "orange-600" },
   ];
 
   return (

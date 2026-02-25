@@ -4,8 +4,8 @@ export const APPLICATION_STATUS = {
     bg: '#91cdfea8',
     text: '#2196F3',
   },
-  UNDER_REVIEW: {
-    value: 'under review',
+  REVIEWED: {
+    value: 'reviewed',
     bg: '#ffd483a8',
     text: '#FFA500',
   },

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  applyJob,
   decideOffer,
   getMyApplications_JobSeeker,
 } from "../api/ApplicationApi";
@@ -25,6 +26,21 @@ export const decideOfferThunk = createAsyncThunk(
     try {
       const res = await decideOffer(appId, decision);
       return res.updateApplication;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
+      );
+    }
+  },
+);
+export const apply = createAsyncThunk(
+  "applications/apply",
+  async ({ jobId, cvId }, { rejectWithValue }) => {
+    try {
+      const response = await applyJob({ jobId, cvId });
+      return response;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
@@ -76,10 +92,12 @@ const applicationsSlice = createSlice({
         rejected_app: 0,
       };
     },
-     optimisticUpdate: (state, action) => {
-    const index = state.items.findIndex((app) => app.id === action.payload.id);
-    if (index !== -1) state.items[index].status = action.payload.status;
-  },
+    optimisticUpdate: (state, action) => {
+      const index = state.items.findIndex(
+        (app) => app.id === action.payload.id,
+      );
+      if (index !== -1) state.items[index].status = action.payload.status;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -112,9 +130,23 @@ const applicationsSlice = createSlice({
       })
       .addCase(decideOfferThunk.rejected, (state) => {
         state.loading = false;
+      })
+
+      //  apply
+      .addCase(apply.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(apply.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(apply.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to apply";
       });
   },
 });
 
-export const { resetApplications,optimisticUpdate  } = applicationsSlice.actions;
+export const { resetApplications, optimisticUpdate } =
+  applicationsSlice.actions;
 export default applicationsSlice.reducer;
