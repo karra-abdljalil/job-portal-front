@@ -32,3 +32,24 @@ export  const RegisterSchema = z
     path: ["repeat_password"],
   });
 
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z.string().min(1, "Password is required") 
+});
+
+export const PasswordSchema = z.object({
+   password: z
+      .string()
+      .min(8)
+      .max(30)
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+        "Password must contain uppercase, lowercase, number and special character",
+      ),
+    repeat_password: z.string().nonempty("Repeat password is required"),
+  
+}).refine((data) => data.password === data.repeat_password, {
+    message: "Passwords do not match",
+    path: ["repeat_password"],
+  });

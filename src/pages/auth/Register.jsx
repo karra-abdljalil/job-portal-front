@@ -4,14 +4,28 @@ import { RegisterSchema } from "@/validations/user.validation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useToast } from "@/components/hooks/use-toast";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import apiClient from "@/services/api";
 import { Link, useSearchParams } from "react-router-dom";
+import { EMPLOYER, JOB_SEEKER } from "@/constants/userRole";
 
 export const Register = () => {
   const [searchParams] = useSearchParams();
   const role = searchParams.get("role");
+  const { toast } = useToast();
+
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const {
     register,
@@ -19,85 +33,159 @@ export const Register = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: { full_name: "", email: "", password: "", repeat_password: "", role },
+    defaultValues: {
+      full_name: "",
+      email: "",
+      password: "",
+      repeat_password: "",
+      role,
+    },
   });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => formData.append(key, data[key]));
+      await apiClient.post("/api/auth/register", data);
 
-      const res = await apiClient.post("/api/auth/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      toast({
+        title: "Account Created Successfully ",
+        description: "Check your email to verify.",
       });
-
-      console.log(res.data.message);
     } catch (err) {
-      console.error(err);
-      console.log(err.response?.data?.message || "Register error");
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: err.response?.data?.message || "Something went wrong.",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 shadow-md rounded-xl w-full max-w-md space-y-4"
-      >
-        <h2 className="text-xl font-bold text-center">Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
+      <Card className="w-full max-w-md shadow-xl rounded-2xl border bg-white">
+        {role === JOB_SEEKER && (
+          <CardHeader className="space-y-2 text-center">
+            <CardTitle className="text-2xl font-semibold tracking-tight">
+              Your Future Starts Here
+            </CardTitle>
+            <CardDescription>
+              Showcase your experience and get discovered by companies hiring
+              today.
+            </CardDescription>
+          </CardHeader>
+        )}
 
-        {/* Full Name */}
-        <div>
-          <Label htmlFor="full_name">Full Name</Label>
-          <Input id="full_name" {...register("full_name")} />
-          {errors.full_name && (
-            <span className="text-red-500 text-sm">{errors.full_name.message}</span>
-          )}
-        </div>
+        {role === EMPLOYER && (
+          <CardHeader className="space-y-2 text-center">
+            <CardTitle className="text-2xl font-semibold tracking-tight">
+              Build Your Dream Team{" "}
+            </CardTitle>
+            <CardDescription>
+              Access a pool of skilled candidates and scale your company
+              efficiently.{" "}
+            </CardDescription>
+          </CardHeader>
+        )}
 
-        {/* Email */}
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && (
-            <span className="text-red-500 text-sm">{errors.email.message}</span>
-          )}
-        </div>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            {/* Full Name */}
+            <div className="space-y-2">
+              <Label htmlFor="full_name">Full Name</Label>
+              <Input
+                id="full_name"
+                placeholder="Jhon"
+                {...register("full_name")}
+              />
+              {errors.full_name && (
+                <p className="text-sm text-red-500">
+                  {errors.full_name.message}
+                </p>
+              )}
+            </div>
 
-        {/* Password */}
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" {...register("password")} />
-          {errors.password && (
-            <span className="text-red-500 text-sm">{errors.password.message}</span>
-          )}
-        </div>
+            {/* Email */}
+            <div className="space-y-2">
+              <Label htmlFor="email">Work Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="emailuser@gmail.com"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-        {/* Repeat Password */}
-        <div>
-          <Label htmlFor="repeat_password">Repeat Password</Label>
-          <Input id="repeat_password" type="password" {...register("repeat_password")} />
-          {errors.repeat_password && (
-            <span className="text-red-500 text-sm">{errors.repeat_password.message}</span>
-          )}
-        </div>
+            {/* Password */}
+            <div className="space-y-2 relative">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Create a secure password"
+                {...register("password")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-9 text-muted-foreground"
+              >
+                {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+              {errors.password && (
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-        {/* Login Link */}
-        <div className="text-sm mb-2">
-          Already have an account?
-          <Link to="/login" className="cursor-pointer text-[#7337FF] hover:underline px-2">
-            Login
-          </Link>
-        </div>
+            {/* Confirm Password */}
+            <div className="space-y-2 relative">
+              <Label htmlFor="repeat_password">Confirm Password</Label>
+              <Input
+                id="repeat_password"
+                type={showRepeatPassword ? "text" : "password"}
+                placeholder="Re-enter your password"
+                {...register("repeat_password")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                className="absolute right-3 top-9 text-muted-foreground"
+              >
+                {showRepeatPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+              {errors.repeat_password && (
+                <p className="text-sm text-red-500">
+                  {errors.repeat_password.message}
+                </p>
+              )}
+            </div>
 
-        {/* Submit Button */}
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </Button>
-      </form>
+            {/* Login */}
+            <div className="text-sm text-center text-gray-600">
+              Already have an account?
+              <Link
+                to="/login"
+                className="ml-1 font-medium text-blue-500 hover:underline"
+              >
+                Sign in
+              </Link>
+            </div>
+
+            {/* Submit */}
+            <Button type="submit" className="bg-sky-700 text-white py-2 rounded-lg hover:bg-sky-800 " disabled={loading} >
+              {loading ? "Creating Account..." : "Create Account"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

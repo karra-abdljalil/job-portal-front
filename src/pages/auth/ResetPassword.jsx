@@ -1,58 +1,44 @@
 import { AuthHeader } from "@/components/common/Headers/AuthHeader";
-import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import apiClient from "@/services/api";
 import jobIcon from "@/assets/job.png";
+import { useToast } from "@/components/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PasswordSchema } from "@/validations/user.validation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+
 
 export const ResetPassword = () => {
-  const { id, token } = useParams(); // get from URL /reset-password/:id/:token
+  const { id, token } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const [form, setForm] = useState({
-    password: "",
-    confirmPassword: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(PasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
-
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Handle form submit
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    setMessage(null);
-
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
+  const onSubmit = async (data) => {
     try {
-      const res = await apiClient.post(
-        `/api/auth/reset-password/${id}/${token}`,
-        { password: form.password }
-      );
-      setMessage(res.data.message || "Password reset successfully");
+      const res = await apiClient.post(`/api/auth/reset-password/${id}/${token}`, {
+        password: data.password,
+      });
+      toast({ title: res.data.message || "Password reset successfully" });
 
-      // Redirect to login after 3 seconds
       setTimeout(() => navigate("/login"), 3000);
-
     } catch (err) {
-      setError(
-        err.error[0]?.message ||
-        "Failed to reset password"
-      );
-    } finally {
-      setIsLoading(false);
+      toast({ title: err?.response?.data?.message || "Failed to reset password" });
     }
   };
 
@@ -61,71 +47,61 @@ export const ResetPassword = () => {
       <AuthHeader />
       <div className="flex justify-center items-center h-[80vh]">
         <form
-          onSubmit={handleResetPassword}
+          onSubmit={handleSubmit(onSubmit)}
           className="bg-white shadow-lg rounded-2xl p-8 w-[350px] flex flex-col gap-4"
         >
-          <img
-            src={jobIcon}
-            alt="JobPortal logo"
-            className="h-10 w-10 object-contain text-blue-700 self-center"
-          />
 
           <h2 className="text-xl font-bold text-center">Reset Password</h2>
 
-          {message && (
-            <p className="text-green-500 text-sm text-center">{message}</p>
-          )}
-
-          {error && (
-            <p className="text-red-500 text-sm text-center">{error}</p>
-          )}
-
           {/* New Password */}
           <div className="w-full my-2">
-            <label htmlFor="password" className="form-label">New Password</label>
-            <input
+            <Label htmlFor="password" className="form-label">New Password</Label>
+            <Input
               id="password"
               type="password"
-              name="password"
               placeholder="Enter new password"
-              value={form.password}
-              onChange={handleChange}
-              required
+              {...register("password")}
               className="border p-2 rounded-lg w-full"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Confirm Password */}
           <div className="w-full my-2">
-            <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-            <input
+            <Label htmlFor="confirmPassword" className="form-label">Confirm Password</Label>
+            <Input
               id="confirmPassword"
               type="password"
-              name="confirmPassword"
               placeholder="Confirm new password"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
+              {...register("confirmPassword")}
               className="border p-2 rounded-lg w-full"
             />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+            )}
           </div>
 
           {/* Back to login */}
           <div className="text-sm mb-2 text-center">
             Remember your password?{" "}
-            <Link to={"/login"} className="cursor-pointer text-[#228CE0] hover:underline px-2">
+            <Link
+              to="/login"
+              className="cursor-pointer text-[#228CE0] hover:underline px-2"
+            >
               Login
             </Link>
           </div>
 
           {/* Submit button */}
-          <button
+          <Button
             type="submit"
-            disabled={isLoading}
+            disabled={isSubmitting}
             className="bg-sky-700 text-white py-2 rounded-lg hover:bg-sky-800 transition"
           >
-            {isLoading ? "Resetting..." : "Reset Password"}
-          </button>
+            {isSubmitting ? "Resetting..." : "Reset Password"}
+          </Button>
         </form>
       </div>
     </>

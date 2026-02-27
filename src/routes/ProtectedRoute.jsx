@@ -1,22 +1,21 @@
-import {useAuth} from "@/contexts/AuthContext"
-import { Login } from "@/pages/auth/Login";
-import { Forbidden } from "@/pages/system/Forbidden";
-
+import { useAuth } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 import Loading from "@/pages/system/Loading";
-export const ProtectedRoute = ({role, children }) => {
+
+export const ProtectedRoute = ({ role, children }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
-    if (isLoading) {
+  if (isLoading) {
     return <Loading />;
   }
 
   if (!isAuthenticated) {
-    return <Login />;
+    return <Navigate to="/login" replace />;
   }
-   if (!role.includes(user?.role)) {
-    return <Forbidden />;
+
+  if (!role.includes(user?.role)) {
+    return <Navigate to="/forbidden" replace />;
   }
-  
 
   return children;
 };

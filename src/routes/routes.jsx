@@ -30,7 +30,7 @@ export default function AppRoutes() {
       <Route path="/verify-email" element={<MagicLinkPageValidation />} />
       <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
 
-      {/* Dashboard (Nested Layout) */}
+      {/* Dashboard  */}
       <Route
         path="/jobseeker"
         element={
