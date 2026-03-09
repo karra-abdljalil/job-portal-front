@@ -18,6 +18,7 @@ import { Dashboard } from "@/components/layouts/DashboardLayout";
 import CandidateCardTest from "@/pages/system/CandidateCardTest";
 import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
 import CompanyProfilePage from "@/pages/Employer/CompanyProfilePage";
+import CompanyProfileEditPage from "@/pages/Employer/CompanyProfileEditPage";
 
 export default function AppRoutes() {
   return (
@@ -58,6 +59,7 @@ export default function AppRoutes() {
         }
       >
         <Route path="company/profile" element={<CompanyProfilePage />} />
+        <Route path="company/profile/edit" element={<CompanyProfileEditPage />} />
         <Route path="jobs/:jobId/applicants" element={<ApplicantsPage />} />
       </Route>
 

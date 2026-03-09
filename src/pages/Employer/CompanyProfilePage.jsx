@@ -1,96 +1,131 @@
 import React, { useEffect, useState } from "react";
-import { getMyCompany, updateMyCompany } from "../../services/company.service";
-import CompanyProfileHero from "../../components/employer/CompanyProfileHero";
-import CompanyProfileForm from "../../components/employer/CompanyProfileForm";
-import CompanyInfoSidebar from "../../components/employer/CompanyInfoSidebar";
-import CompanyLogoUploader from "../../components/employer/CompanyLogoUploader";
+import { getMyCompany } from "../../services/company.service";
+import { getCompanyLogo } from "../../services/companyLogo.service";
+import CompanyLinkedInHero from "../../components/employer/CompanyLinkedInHero";
+import CompanyLinkedInTabs from "../../components/employer/CompanyLinkedInTabs";
+import CompanyAboutCard from "../../components/employer/CompanyAboutCard";
+import CompanyRightSidebar from "../../components/employer/CompanyRightSidebar";
 
 export default function CompanyProfilePage() {
-  const [form, setForm] = useState({
+  const [company, setCompany] = useState({
     company_name: "",
     description: "",
     industry: "",
     location: "",
+    logoUrl: "",
   });
 
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [activeTab, setActiveTab] = useState("Accueil");
 
   useEffect(() => {
-    const fetchCompany = async () => {
+    let objectUrl = null;
+
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        setError("");
+        const companyRes = await getMyCompany();
+        const data = companyRes.company || companyRes.data || companyRes;
 
-        const res = await getMyCompany();
-        const company = res.company || res.data || res;
+        let logoUrl = "";
 
-        setForm({
-          company_name: company.company_name || "",
-          description: company.description || "",
-          industry: company.industry || "",
-          location: company.location || "",
+        try {
+          const blob = await getCompanyLogo();
+          objectUrl = URL.createObjectURL(blob);
+          logoUrl = objectUrl;
+        } catch (e) {
+          logoUrl = "";
+        }
+
+        setCompany({
+          company_name: data.company_name || "",
+          description: data.description || "",
+          industry: data.industry || "",
+          location: data.location || "",
+          logoUrl,
         });
       } catch (err) {
-        console.error(err);
-        setError("Impossible de charger le profil entreprise.");
+        console.error("Company profile load error:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCompany();
+    fetchData();
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f3f2ef] py-8">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
+            <p className="text-lg text-gray-600">
+              Chargement du profil entreprise...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "Accueil":
+      case "À propos":
+        return <CompanyAboutCard company={company} />;
 
-    try {
-      setSaving(true);
-      setError("");
-      setSuccess("");
+      case "Posts":
+        return (
+          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900">Posts</h2>
+            <p className="mt-3 text-gray-600">
+              Aucune publication pour le moment.
+            </p>
+          </div>
+        );
 
-      await updateMyCompany(form);
-      setSuccess("Profil entreprise mis à jour avec succès.");
-    } catch (err) {
-      console.error(err);
-      setError("Impossible de mettre à jour le profil entreprise.");
-    } finally {
-      setSaving(false);
+      case "Emplois":
+        return (
+          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900">Emplois</h2>
+            <p className="mt-3 text-gray-600">
+              Les offres de l’entreprise seront affichées ici bientôt.
+            </p>
+          </div>
+        );
+
+      case "Personnes":
+        return (
+          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900">Personnes</h2>
+            <p className="mt-3 text-gray-600">
+              Les membres de l’entreprise seront affichés ici bientôt.
+            </p>
+          </div>
+        );
+
+      default:
+        return <CompanyAboutCard company={company} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-[#f3f2ef] py-8">
-      <div className="mx-auto max-w-5xl px-4">
-        <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="grid gap-4 xl:grid-cols-[2.2fr_1fr]">
           <div className="space-y-4">
-            <CompanyProfileHero companyName={form.company_name} />
-
-<CompanyLogoUploader />
-
-<CompanyProfileForm
-  form={form}
-  loading={loading}
-  saving={saving}
-  error={error}
-  success={success}
-  onChange={handleChange}
-  onSubmit={handleSubmit}
-/>
+            <CompanyLinkedInHero company={company} />
+            <CompanyLinkedInTabs
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+            {renderTabContent()}
           </div>
 
-          <CompanyInfoSidebar />
+          <CompanyRightSidebar />
         </div>
       </div>
     </div>
