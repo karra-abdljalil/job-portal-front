@@ -20,6 +20,7 @@ import CandidateCardTest from "@/pages/system/CandidateCardTest";
 import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
 import CompanyProfilePage from "@/pages/Employer/CompanyProfilePage";
 import CompanyProfileEditPage from "@/pages/Employer/CompanyProfileEditPage";
+import EmployerDashboardPage from "@/pages/Employer/EmployerDashboardPage";
 
 import AdminRoutes from "./AdminRoutes";
 import DashboardApp from "@/pages/Dashboard"
@@ -83,6 +84,7 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
+        <Route path="dashboard" element={<EmployerDashboardPage />} />
         <Route path="company/profile" element={<CompanyProfilePage />} />
         <Route
           path="company/profile/edit"
