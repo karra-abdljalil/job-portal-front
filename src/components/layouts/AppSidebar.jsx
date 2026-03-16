@@ -7,10 +7,14 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
+import { LogOut } from 'lucide-react';
+import { useAuth } from "@/contexts/AuthContext"
 
 import { NavLink } from "react-router-dom"
 
 export function AppSidebar({ items }) {
+  const { logout } = useAuth()
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -34,6 +38,12 @@ export function AppSidebar({ items }) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={logout} className="flex items-center p-2 rounded hover:bg-gray-100">
+                  <LogOut />
+                  Logout
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -6,6 +6,7 @@ import { MagicLinkPageValidation } from "@/pages/auth/MagicLinkPageValidation";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { GuestRoute } from "./GuestRoute";
 import { NotFoundPage } from "@/pages/system/NotFoundPage";
+import { Forbidden } from "@/pages/system/Forbidden";
 import { ForgotPassword } from "@/pages/auth/ForgotPassword";
 import { ResetPassword } from "@/pages/auth/ResetPassword";
 
@@ -20,6 +21,8 @@ import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
 import CompanyProfilePage from "@/pages/Employer/CompanyProfilePage";
 import CompanyProfileEditPage from "@/pages/Employer/CompanyProfileEditPage";
 
+import AdminRoutes from "./AdminRoutes";
+import DashboardApp from "@/pages/Dashboard"
 export default function AppRoutes() {
   return (
     <Routes>
@@ -28,17 +31,39 @@ export default function AppRoutes() {
       <Route path="/test-candidate-card" element={<CandidateCardTest />} />
 
       {/* Guest */}
-      <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
-      <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
-      <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+      <Route
+        path="/login"
+        element={
+          <GuestRoute>
+            <Login />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <GuestRoute>
+            <Register />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <GuestRoute>
+            <ForgotPassword />
+          </GuestRoute>
+        }
+      />
       <Route path="/verify-email" element={<MagicLinkPageValidation />} />
       <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
 
+      <Route path="/dashboard" element={<DashboardApp />} />
       {/* Dashboard Jobseeker */}
       <Route
         path="/jobseeker"
         element={
-          <ProtectedRoute role={[JOB_SEEKER, EMPLOYER, ADMIN]}>
+          <ProtectedRoute role={[JOB_SEEKER]}>
             <Dashboard />
           </ProtectedRoute>
         }
@@ -53,16 +78,22 @@ export default function AppRoutes() {
       <Route
         path="/employer"
         element={
-          <ProtectedRoute role={[EMPLOYER, ADMIN]}>
+          <ProtectedRoute role={[EMPLOYER]}>
             <Dashboard />
           </ProtectedRoute>
         }
       >
         <Route path="company/profile" element={<CompanyProfilePage />} />
-        <Route path="company/profile/edit" element={<CompanyProfileEditPage />} />
+        <Route
+          path="company/profile/edit"
+          element={<CompanyProfileEditPage />}
+        />
         <Route path="jobs/:jobId/applicants" element={<ApplicantsPage />} />
       </Route>
+      {AdminRoutes}
 
+      {/* 403*/}
+      <Route path="/forbidden" element={<Forbidden />} />
       {/* 404 */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

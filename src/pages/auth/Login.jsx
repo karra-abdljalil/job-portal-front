@@ -17,12 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-
+import { useAuth } from "@/contexts/AuthContext";
 export const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { checkIfAuthenticated } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -36,8 +37,11 @@ export const Login = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await apiClient.post("/api/auth/login", data);
-      navigate("/jobseeker/applications");
+     const res =  await apiClient.post("/api/auth/login", data)
+     if (res.status === 200) {
+        checkIfAuthenticated();
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
