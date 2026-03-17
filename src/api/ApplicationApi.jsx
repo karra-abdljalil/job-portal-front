@@ -4,7 +4,7 @@ import apiClient from '@/services/api'
 export const applyJob = async ({ jobId, cvId }) => {
   try {
     const response = await apiClient.post(
-      `api/applications/apply`,
+      `/api/applications/apply`,
       { jobId, cvId }
     );
 
@@ -22,7 +22,7 @@ export const getMyApplications_JobSeeker = async (
 ) => {
   try {
     const response = await apiClient.get(
-    `api/applications/myApplications?search=${search}&page=${page}&limit=${limit}`
+    `/api/applications/myApplications?search=${search}&page=${page}&limit=${limit}`
   );
 
   return response.data;
@@ -35,7 +35,7 @@ export const getMyApplications_JobSeeker = async (
 export const decideOffer = async (appId, decision) => {
   try {
     const response = await apiClient.post(
-    `api/applications/${appId}/decision`,
+    `/api/applications/${appId}/decision`,
     { decision }
   );
 

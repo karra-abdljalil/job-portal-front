@@ -1,11 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import {  Route } from "react-router-dom";
 import UsersPage from "@/pages/admin/users/Page";
 import JobsPage from "@/pages/admin/jobs/Page";
-import { ADMIN, EMPLOYER, JOB_SEEKER } from "@/constants/userRole";
+import JobModerationPage from "@/pages/admin/moderations/Page";
+import CompaniesPage from "@/pages/admin/companies/Page"
+import { ADMIN } from "@/constants/userRole";
 import { ProtectedRoute } from "./ProtectedRoute";
-
 import  AdminDashboard  from "@/pages/admin/AdminDashboard";
-
 import { Dashboard } from "@/components/layouts/AdminDashboarLayout"
 
 const adminRoutes = [
@@ -33,6 +33,16 @@ const adminRoutes = [
     </ProtectedRoute>
     
   }/>,
+  <Route
+    path="/admin/companies"
+    element={
+    <ProtectedRoute role={[ADMIN]}>
+      <Dashboard>
+        <CompaniesPage />
+      </Dashboard>
+    </ProtectedRoute>
+    
+  }/>,
 
   <Route
     path="/admin/jobs"
@@ -45,19 +55,17 @@ const adminRoutes = [
     
   }/>,
   
-  // <Route
-  //   path="/admin"
-  //   element={
-  //     <ProtectedRoute role={[ADMIN]}>
-  //       <AdminDashboard />
-  //     </ProtectedRoute>
-  //   }
-  // ></Route>,  
-  // <Route path="/users" element={
-  //   <ProtectedRoute role={ADMIN}>
-  //     <UsersPage />
-  //   </ProtectedRoute>
-  // } />,
+  <Route
+    path="/admin/moderations"
+    element={
+    <ProtectedRoute role={[ADMIN]}>
+      <Dashboard>
+        <JobModerationPage />
+      </Dashboard>
+    </ProtectedRoute>
+    
+  }/>,
+  
   
 ]
 
