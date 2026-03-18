@@ -21,6 +21,11 @@ import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
 import CompanyProfilePage from "@/pages/Employer/CompanyProfilePage";
 import CompanyProfileEditPage from "@/pages/Employer/CompanyProfileEditPage";
 import EmployerDashboardPage from "@/pages/Employer/EmployerDashboardPage";
+import MyJobsPage from "@/pages/Employer/MyJobsPage";
+import EmployerJobDashboardPage from "@/pages/Employer/EmployerJobDashboardPage";
+import CreateJobPage from "@/pages/Employer/CreateJobPage";
+import EditJobPage from "@/pages/Employer/EditJobPage";
+import EmployerShortlistPage from "@/pages/Employer/EmployerShortlistPage";
 
 import AdminRoutes from "./AdminRoutes";
 import DashboardApp from "@/pages/Dashboard"
@@ -64,7 +69,7 @@ export default function AppRoutes() {
       <Route
         path="/jobseeker"
         element={
-          <ProtectedRoute role={[JOB_SEEKER]}>
+          <ProtectedRoute role={[JOB_SEEKER,ADMIN]}>
             <Dashboard />
           </ProtectedRoute>
         }
@@ -76,26 +81,30 @@ export default function AppRoutes() {
       </Route>
 
       {/* Dashboard Employer */}
-      <Route
-        path="/employer"
-        element={
-          <ProtectedRoute role={[EMPLOYER]}>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<EmployerDashboardPage />} />
-        <Route path="company/profile" element={<CompanyProfilePage />} />
-        <Route
-          path="company/profile/edit"
-          element={<CompanyProfileEditPage />}
-        />
-        <Route path="jobs/:jobId/applicants" element={<ApplicantsPage />} />
-      </Route>
-      {AdminRoutes}
+<Route
+  path="/employer"
+  element={
+    <ProtectedRoute role={[EMPLOYER, ADMIN]}>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+>
+  <Route path="dashboard" element={<EmployerDashboardPage />} />
+  <Route path="company/profile" element={<CompanyProfilePage />} />
+  <Route path="company/profile/edit" element={<CompanyProfileEditPage />} />
+  <Route path="jobs" element={<MyJobsPage />} />
+  <Route path="jobs/create" element={<CreateJobPage />} />
+  <Route path="jobs/:jobId" element={<EmployerJobDashboardPage />} />
+  <Route path="jobs/:jobId/edit" element={<EditJobPage />} />
+  <Route path="jobs/:jobId/applicants" element={<ApplicantsPage />} />
+  <Route path="jobs/:jobId/shortlist" element={<EmployerShortlistPage />} />
+</Route>
 
-      {/* 403*/}
-      <Route path="/forbidden" element={<Forbidden />} />
+{/* ✅ AJOUT ICI */}
+{AdminRoutes}
+
+{/* 403*/}
+<Route path="/forbidden" element={<Forbidden />} />
       {/* 404 */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

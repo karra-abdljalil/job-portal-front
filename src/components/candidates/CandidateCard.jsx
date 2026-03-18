@@ -13,8 +13,8 @@ export default function CandidateCard({ candidate }) {
     skills = [],
     cvId,
     cvFileName,
-    lastActive = "Actif récemment",
-    status = "Disponible",
+    lastActive = "Recently active",
+    status = "Available",
     isShortlisted: initialShortlisted = false,
   } = candidate;
 
@@ -43,7 +43,7 @@ export default function CandidateCard({ candidate }) {
       setIsShortlisted(res?.application?.is_shortlisted ?? nextValue);
     } catch (err) {
       console.error("Shortlist error:", err);
-      alert("Impossible de mettre à jour la shortlist.");
+      alert("Unable to update the shortlist.");
     } finally {
       setShortlistLoading(false);
     }
@@ -74,14 +74,14 @@ export default function CandidateCard({ candidate }) {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Download CV error:", err);
-      alert("Impossible de télécharger le CV. Vérifie que tu es connectée.");
+      alert("Unable to download the CV. Please make sure you are logged in.");
     }
   };
 
   const statusStyle =
-    status === "Disponible"
+    status === "Available"
       ? "bg-green-50 text-green-700 ring-green-200"
-      : status === "En recherche"
+      : status === "Looking for opportunities"
       ? "bg-blue-50 text-blue-700 ring-blue-200"
       : "bg-gray-50 text-gray-700 ring-gray-200";
 
@@ -120,7 +120,7 @@ export default function CandidateCard({ candidate }) {
 
               <button
                 className="rounded-full px-2 py-1 text-gray-500 hover:bg-gray-100"
-                title="Plus d’options"
+                title="More options"
                 type="button"
               >
                 ⋯
@@ -153,7 +153,7 @@ export default function CandidateCard({ candidate }) {
               type="button"
             >
               {shortlistLoading
-                ? "Chargement..."
+                ? "Loading..."
                 : isShortlisted
                 ? "★ Shortlisted"
                 : "+ Shortlist"}
@@ -162,7 +162,7 @@ export default function CandidateCard({ candidate }) {
             <button
               className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
               type="button"
-              onClick={() => alert("À connecter plus tard: messagerie")}
+              onClick={() => alert("To be connected later: messaging")}
             >
               Message
             </button>
@@ -172,18 +172,18 @@ export default function CandidateCard({ candidate }) {
                 onClick={handleDownloadCv}
                 className="rounded-full border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 type="button"
-                title={cvFileName || "Télécharger CV"}
+                title={cvFileName || "Download CV"}
               >
-                Télécharger CV
+                Download CV
               </button>
             ) : (
               <button
                 disabled
                 className="cursor-not-allowed rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-400"
-                title="CV non disponible"
+                title="CV not available"
                 type="button"
               >
-                Télécharger CV
+                Download CV
               </button>
             )}
           </div>
@@ -201,7 +201,7 @@ export default function CandidateCard({ candidate }) {
             type="button"
           >
             {shortlistLoading
-              ? "Chargement..."
+              ? "Loading..."
               : isShortlisted
               ? "★ Shortlisted"
               : "+ Shortlist"}
@@ -210,7 +210,7 @@ export default function CandidateCard({ candidate }) {
           <button
             className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
             type="button"
-            onClick={() => alert("À connecter plus tard: messagerie")}
+            onClick={() => alert("To be connected later: messaging")}
           >
             Message
           </button>
@@ -221,29 +221,29 @@ export default function CandidateCard({ candidate }) {
               className="rounded-full border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
               type="button"
             >
-              Télécharger CV
+              Download CV
             </button>
           ) : (
             <button
               disabled
               className="cursor-not-allowed rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-400"
-              title="CV non disponible"
+              title="CV not available"
               type="button"
             >
-              Télécharger CV
+              Download CV
             </button>
           )}
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t border-[#e0dfdc] px-4 py-3 text-xs text-gray-600">
-        <span>Profil mis à jour récemment</span>
+        <span>Profile updated recently</span>
         <button
           className="font-semibold text-[#0a66c2] hover:underline"
           type="button"
-          onClick={() => alert("À connecter plus tard: page profil candidat")}
+          onClick={() => alert("To be connected later: candidate profile page")}
         >
-          Voir profil
+          View profile
         </button>
       </div>
     </div>

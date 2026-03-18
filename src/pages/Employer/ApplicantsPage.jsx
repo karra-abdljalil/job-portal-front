@@ -24,7 +24,7 @@ export default function ApplicantsPage() {
   applicationId: app.application_id,
   fullName: app.full_name,
   title: app.email,
-  location: "Non renseigné",
+  location: "Not specified",
   experienceLevel: app.status,
   skills: [],
   cvId: app.cv_id,
@@ -33,14 +33,14 @@ export default function ApplicantsPage() {
   status:
     app.matching_score !== null
       ? `Score IA: ${app.matching_score}`
-      : "Candidat",
+      : "Candidate",
   isShortlisted: app.is_shortlisted || false,
 }));
 
         setApplicants(mappedApplicants);
       } catch (err) {
         console.error(err);
-        setError("Impossible de charger les candidats.");
+        setError("Unable to load applicants.");
       } finally {
         setLoading(false);
       }
@@ -71,7 +71,7 @@ export default function ApplicantsPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h1 className="text-lg font-semibold text-gray-900">
-                    Candidats de l’offre
+                    Job Applicants
                   </h1>
                   <p className="mt-1 text-sm text-gray-600">
                     Job ID : {jobId}
@@ -79,7 +79,7 @@ export default function ApplicantsPage() {
                 </div>
 
                 <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-semibold text-gray-700">
-                  {filteredApplicants.length} candidat(s)
+                  {filteredApplicants.length} applicant(s)
                 </span>
               </div>
 
@@ -87,7 +87,7 @@ export default function ApplicantsPage() {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Rechercher par nom ou email..."
+                  placeholder="Search by name or email..."
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#0a66c2]/30"
                 />
               </div>
@@ -95,7 +95,7 @@ export default function ApplicantsPage() {
 
             {loading && (
               <div className="rounded-xl border border-[#e0dfdc] bg-white p-4 shadow-sm text-sm text-gray-600">
-                Chargement des candidats...
+                Loading applicants...
               </div>
             )}
 
@@ -107,7 +107,7 @@ export default function ApplicantsPage() {
 
             {!loading && !error && filteredApplicants.length === 0 && (
               <div className="rounded-xl border border-[#e0dfdc] bg-white p-4 shadow-sm text-sm text-gray-600">
-                Aucun candidat trouvé.
+               No applicants found.
               </div>
             )}
 
@@ -121,16 +121,16 @@ export default function ApplicantsPage() {
           {/* Sidebar */}
           <aside className="hidden md:block space-y-3">
             <div className="rounded-xl border border-[#e0dfdc] bg-white p-4 shadow-sm">
-              <p className="text-sm font-semibold text-gray-900">Résumé</p>
+              <p className="text-sm font-semibold text-gray-900">Summary</p>
               <p className="mt-2 text-sm text-gray-600">
-                Cette page affiche les candidats ayant postulé à l’offre.
+                This page displays applicants who applied for the job.
               </p>
             </div>
 
             <div className="rounded-xl border border-[#e0dfdc] bg-white p-4 shadow-sm">
               <p className="text-sm font-semibold text-gray-900">Actions</p>
               <p className="mt-2 text-sm text-gray-600">
-                Shortlist UI disponible, téléchargement CV actif.
+                Shortlist UI available, CV download enabled.
               </p>
             </div>
           </aside>
