@@ -57,7 +57,7 @@ export default function CompanyProfileEditPage() {
 
         setError(
           err?.response?.data?.message ||
-            "Impossible de charger le profil entreprise."
+           "Unable to load the company profile."
         );
       } finally {
         setLoading(false);
@@ -85,11 +85,11 @@ export default function CompanyProfileEditPage() {
 
      if (hasCompany) {
   await updateMyCompany(form);
-  setSuccess("Profil entreprise mis à jour avec succès.");
+  setSuccess("Company profile updated successfully.");
 } else {
   await createCompany(form);
   setHasCompany(true);
-  setSuccess("Profil entreprise créé avec succès.");
+  setSuccess("Company profile created successfully.");
 
   setTimeout(() => {
     navigate("/employer/company/profile");
@@ -103,8 +103,8 @@ export default function CompanyProfileEditPage() {
       setError(
         err?.response?.data?.message ||
           (hasCompany
-            ? "Impossible de mettre à jour le profil entreprise."
-            : "Impossible de créer le profil entreprise.")
+            ? "Unable to update the company profile."
+            : "Unable to create the company profile.")
       );
     } finally {
       setSaving(false);
@@ -112,12 +112,12 @@ export default function CompanyProfileEditPage() {
   };
 
   const pageTitle = hasCompany
-    ? "Modifier le profil entreprise"
-    : "Créer le profil entreprise";
+    ? "Edit Company Profile"
+    : "Create Company Profile";
 
   const pageDescription = hasCompany
-    ? "Mettez à jour les informations visibles sur votre page entreprise."
-    : "Complétez les informations de votre entreprise pour commencer à publier vos offres.";
+    ? "Update the information displayed on your company page."
+    : "Complete your company information to start posting jobs.";
 
   return (
     <div className="min-h-screen bg-[#f3f2ef] py-8">
@@ -133,14 +133,14 @@ export default function CompanyProfileEditPage() {
               to="/employer/company/profile"
               className="rounded-full border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition hover:bg-white"
             >
-              ← Retour au profil
+              ← Back to Profile
             </Link>
           ) : (
             <Link
               to="/employer/dashboard"
               className="rounded-full border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition hover:bg-white"
             >
-              ← Retour au dashboard
+              ← Back to Dashboard
             </Link>
           )}
         </div>
@@ -162,28 +162,28 @@ export default function CompanyProfileEditPage() {
 
           <aside className="space-y-4">
             <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900">Conseils</h2>
+              <h2 className="text-sm font-semibold text-gray-900">Tips</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Renseignez un nom clair, une description précise et une localisation correcte.
+                Provide a clear name, an accurate description, and a correct location.
               </p>
             </div>
 
             <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
               <h2 className="text-sm font-semibold text-gray-900">
-                Bonnes pratiques
+                Best Practices
               </h2>
               <p className="mt-2 text-sm text-gray-600">
-                Un profil complet renforce la confiance des candidats et améliore la qualité des candidatures.
+                A complete profile builds candidate trust and improves the quality of applications.
               </p>
             </div>
 
             {!hasCompany ? (
               <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
                 <h2 className="text-sm font-semibold text-gray-900">
-                  Avant de commencer
+                  Before You Start
                 </h2>
                 <p className="mt-2 text-sm text-gray-600">
-                  Une fois votre entreprise créée, vous pourrez ensuite ajouter votre logo, publier des offres et suivre les candidatures.
+                  Once your company is created, you will be able to add your logo, post jobs, and track applications.
                 </p>
               </div>
             ) : null}
