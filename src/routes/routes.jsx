@@ -20,6 +20,12 @@ import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
 import CompanyProfilePage from "@/pages/Employer/CompanyProfilePage";
 import CompanyProfileEditPage from "@/pages/Employer/CompanyProfileEditPage";
 
+import ProfilePage from "@/pages/JobSeeker/Profile";
+import SettingsPage from "@/pages/JobSeeker/Settings";
+import DashboardJobSeeker from "@/pages/JobSeeker/DashboardJobSeeker";
+import JobsPage from "@/pages/JobSeeker/Jobs";
+import JobDetailPage from "@/pages/JobSeeker/JobDetail";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -38,15 +44,20 @@ export default function AppRoutes() {
       <Route
         path="/jobseeker"
         element={
-          <ProtectedRoute role={[JOB_SEEKER, EMPLOYER, ADMIN]}>
+          <ProtectedRoute role={[JOB_SEEKER]}>
             <Dashboard />
           </ProtectedRoute>
         }
       >
         <Route path="applications" element={<MyApplicationsPage />} />
         <Route path="resumes" element={<MyCvs />} />
-        <Route path="apply" element={<ApplyButton />} />
         <Route path="candidates-test" element={<CandidateCardTest />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="dashboard" element={<DashboardJobSeeker />} />
+        <Route path="jobs" element={<JobsPage />} />
+        <Route path="jobs/:id" element={<JobDetailPage />} />
+        
       </Route>
 
       {/* Dashboard Employer */}
