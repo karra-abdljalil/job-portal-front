@@ -1,72 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
-const initialPages = [
-  { id: 1, name: "Tech Solutions Maroc", field: "Informatique", followed: false },
-  { id: 2, name: "Digital Maroc", field: "Services et conseil en informatique", followed: false },
-  { id: 3, name: "InnoviTech", field: "Informatique", followed: false },
-];
-
-export default function CompanyRightSidebar() {
-  const [pages, setPages] = useState(initialPages);
-
-  const toggleFollow = (id) => {
-    setPages((prev) =>
-      prev.map((page) =>
-        page.id === id ? { ...page, followed: !page.followed } : page
-      )
-    );
-  };
-
-  const handleViewMore = () => {
-    alert("Liste complète des pages similaires bientôt disponible.");
-  };
-
+export default function CompanyRightSidebar({ company }) {
   return (
     <aside className="space-y-4">
-      <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-        <h3 className="text-2xl font-bold text-gray-900">Pages similaires</h3>
+      <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900">
+          Résumé entreprise
+        </h3>
 
-        <div className="mt-6 space-y-5">
-          {pages.map((item) => (
-            <div key={item.id} className="flex items-start gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-[#1d4ed8] to-[#0ea5e9] text-lg font-bold text-white">
-                {item.name.charAt(0)}
-              </div>
+        <div className="mt-4 space-y-4 text-sm">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-gray-500">
+              Entreprise
+            </p>
+            <p className="mt-1 font-medium text-gray-900">
+              {company?.company_name || "Non renseignée"}
+            </p>
+          </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-lg font-semibold text-gray-900">
-                  {item.name}
-                </p>
-                <p className="text-sm text-gray-500">{item.field}</p>
+          <div>
+            <p className="text-xs uppercase tracking-wide text-gray-500">
+              Secteur
+            </p>
+            <p className="mt-1 text-gray-700">
+              {company?.industry || "Non renseigné"}
+            </p>
+          </div>
 
-                <button
-                  type="button"
-                  onClick={() => toggleFollow(item.id)}
-                  className="mt-3 rounded-full border border-gray-400 px-4 py-2 text-base font-semibold text-gray-700 transition hover:bg-gray-50"
-                >
-                  {item.followed ? "✓ Suivi" : "+ Suivre"}
-                </button>
-              </div>
-            </div>
-          ))}
+          <div>
+            <p className="text-xs uppercase tracking-wide text-gray-500">
+              Localisation
+            </p>
+            <p className="mt-1 text-gray-700">
+              {company?.location || "Non renseignée"}
+            </p>
+          </div>
         </div>
-
-        <button
-          type="button"
-          onClick={handleViewMore}
-          className="mt-6 w-full text-left text-xl font-semibold text-gray-700 hover:underline"
-        >
-          Voir plus de pages similaires →
-        </button>
       </div>
 
-      <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-        <h3 className="text-2xl font-bold text-gray-900">Pages affiliées</h3>
-        <p className="mt-4 text-2xl font-bold text-gray-900">
-          Aucune page affiliée
-        </p>
-        <p className="mt-3 text-base leading-7 text-gray-600">
-          Les pages affiliées sont des pages LinkedIn liées à cette page d’entreprise.
+      <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900">
+          Actions rapides
+        </h3>
+
+        <div className="mt-4 flex flex-col gap-2">
+          <Link
+            to="/employer/company/profile/edit"
+            className="rounded-xl border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+          >
+            Modifier l’entreprise
+          </Link>
+
+          <Link
+            to="/employer/dashboard"
+            className="rounded-xl border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+          >
+            Retour au dashboard
+          </Link>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900">Conseil</h3>
+        <p className="mt-3 text-sm leading-6 text-gray-600">
+          Un profil entreprise clair améliore la confiance des candidats et rend vos offres plus attractives.
         </p>
       </div>
     </aside>

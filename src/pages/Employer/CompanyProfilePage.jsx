@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getMyCompany } from "../../services/company.service";
 import { getCompanyLogo } from "../../services/companyLogo.service";
 import CompanyLinkedInHero from "../../components/employer/CompanyLinkedInHero";
@@ -7,24 +8,26 @@ import CompanyAboutCard from "../../components/employer/CompanyAboutCard";
 import CompanyRightSidebar from "../../components/employer/CompanyRightSidebar";
 
 export default function CompanyProfilePage() {
-  const [company, setCompany] = useState({
-    company_name: "",
-    description: "",
-    industry: "",
-    location: "",
-    logoUrl: "",
-  });
-
+  const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Accueil");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let objectUrl = null;
 
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError("");
+
         const companyRes = await getMyCompany();
-        const data = companyRes.company || companyRes.data || companyRes;
+        const data = companyRes?.company || null;
+
+        if (!data) {
+          setCompany(null);
+          return;
+        }
 
         let logoUrl = "";
 
@@ -37,14 +40,20 @@ export default function CompanyProfilePage() {
         }
 
         setCompany({
+          id: data.id,
           company_name: data.company_name || "",
           description: data.description || "",
           industry: data.industry || "",
           location: data.location || "",
+          logo: data.logo || "",
           logoUrl,
         });
       } catch (err) {
         console.error("Company profile load error:", err);
+        setError(
+          err?.response?.data?.message ||
+            "Impossible de charger le profil entreprise."
+        );
       } finally {
         setLoading(false);
       }
@@ -65,6 +74,51 @@ export default function CompanyProfilePage() {
             <p className="text-lg text-gray-600">
               Chargement du profil entreprise...
             </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#f3f2ef] py-8">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!company) {
+    return (
+      <div className="min-h-screen bg-[#f3f2ef] py-8">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-8 shadow-sm">
+            <h1 className="text-2xl font-bold text-gray-900">
+              Aucun profil entreprise
+            </h1>
+            <p className="mt-3 text-sm leading-6 text-gray-600">
+              Vous devez d’abord créer votre profil entreprise avant de pouvoir le consulter.
+            </p>
+
+            <div className="mt-6 flex gap-3">
+              <Link
+                to="/employer/company/profile/edit"
+                className="rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white hover:bg-[#004182]"
+              >
+                Créer le profil entreprise
+              </Link>
+
+              <Link
+                to="/employer/dashboard"
+                className="rounded-full border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-white"
+              >
+                Retour au dashboard
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -125,7 +179,7 @@ export default function CompanyProfilePage() {
             {renderTabContent()}
           </div>
 
-          <CompanyRightSidebar />
+          <CompanyRightSidebar company={company} />
         </div>
       </div>
     </div>

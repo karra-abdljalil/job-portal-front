@@ -1,14 +1,21 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import apiClient from "@/services/api";
 import socket from "@/socket";
-
+import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
+  const logout = () => {
+    apiClient.post("/api/auth/logout");
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate("/");
+  };
   const checkIfAuthenticated = async () => {
     try {
       const res = await apiClient.get("/api/auth/me");
@@ -68,6 +75,7 @@ useEffect(() => {
         isAuthenticated,
         setIsAuthenticated,
         checkIfAuthenticated,
+        logout,
       }}
     >
       {children}
