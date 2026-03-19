@@ -9,6 +9,7 @@ import { NotFoundPage } from "@/pages/system/NotFoundPage";
 import { Forbidden } from "@/pages/system/Forbidden";
 import { ForgotPassword } from "@/pages/auth/ForgotPassword";
 import { ResetPassword } from "@/pages/auth/ResetPassword";
+import { Navigate } from "react-router-dom";
 
 import { ADMIN, EMPLOYER, JOB_SEEKER } from "@/constants/userRole";
 
@@ -80,6 +81,7 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
+        <Route index element={<Navigate to="/jobseeker/dashboard" replace />} />
         <Route path="applications" element={<MyApplicationsPage />} />
         <Route path="resumes" element={<MyCvs />} />
         <Route path="candidates-test" element={<CandidateCardTest />} />

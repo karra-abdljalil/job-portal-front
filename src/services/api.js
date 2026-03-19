@@ -17,7 +17,7 @@ const refreshClient = axios.create(config);
 
 // 2. Request Interceptor (Simplifying your Throttler)
 let PENDING_REQUESTS = 0;
-const MAX_REQUESTS_COUNT = 5;
+const MAX_REQUESTS_COUNT = 10;
 
 apiClient.interceptors.request.use(async (config) => {
   // If you must throttle, use a simple check rather than an interval loop
