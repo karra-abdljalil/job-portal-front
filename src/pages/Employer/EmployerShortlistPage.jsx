@@ -20,42 +20,42 @@ export default function EmployerShortlistPage() {
         setError("");
 
         const [jobRes, shortlistRes] = await Promise.all([
-  getEmployerJobById(jobId),
-  getShortlistedApplicantsByJob(jobId),
-]);
+          getEmployerJobById(jobId),
+          getShortlistedApplicantsByJob(jobId),
+        ]);
 
-setJob(jobRes?.data || null);
+        setJob(jobRes?.data || null);
 
-const rawApplicants = shortlistRes?.shortlisted || [];
+        const rawApplicants = shortlistRes?.shortlisted || [];
 
-const mappedApplicants = rawApplicants.map((app) => ({
-  id: app.application_id || app.id,
-  applicationId: app.application_id || app.id,
-  fullName: app.full_name || "Candidat",
-  title: app.email || "Email non renseigné",
-  location: app.location || "Non renseigné",
-  experienceLevel: app.status || "Shortlisted",
-  skills: app.skills || [],
-  cvId: app.cv_id || null,
-  cvFileName: app.cv_file_name || "cv.pdf",
-  lastActive: app.shortlisted_at
-    ? new Date(app.shortlisted_at).toLocaleDateString("fr-FR")
-    : app.application_date
-    ? new Date(app.application_date).toLocaleDateString("fr-FR")
-    : "Date non disponible",
-  status:
-    app.matching_score !== null && app.matching_score !== undefined
-      ? `Score IA: ${app.matching_score}`
-      : "Shortlisted",
-  isShortlisted: true,
-}));
+        const mappedApplicants = rawApplicants.map((app) => ({
+          id: app.application_id || app.id,
+          applicationId: app.application_id || app.id,
+          fullName: app.full_name || "Candidate",
+          title: app.email || "Email not provided",
+          location: app.location || "Not provided",
+          experienceLevel: app.status || "Shortlisted",
+          skills: app.skills || [],
+          cvId: app.cv_id || null,
+          cvFileName: app.cv_file_name || "cv.pdf",
+          lastActive: app.shortlisted_at
+            ? new Date(app.shortlisted_at).toLocaleDateString("fr-FR")
+            : app.application_date
+            ? new Date(app.application_date).toLocaleDateString("fr-FR")
+            : "Date not available",
+          status:
+            app.matching_score !== null && app.matching_score !== undefined
+              ? `AI Score: ${app.matching_score}`
+              : "Shortlisted",
+          isShortlisted: true,
+        }));
 
-setShortlistedApplicants(mappedApplicants);
+        setShortlistedApplicants(mappedApplicants);
       } catch (err) {
         console.error("Shortlist page error:", err);
         setError(
           err?.message ||
-            "Impossible de charger la shortlist pour cette offre."
+            "Unable to load the shortlist for this job."
         );
       } finally {
         setLoading(false);
@@ -79,125 +79,138 @@ setShortlistedApplicants(mappedApplicants);
   }, [shortlistedApplicants, search]);
 
   return (
-    <div className="min-h-full bg-[#f3f2ef]">
-      <div className="mx-auto max-w-7xl space-y-4">
-        {/* Header */}
-        <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Shortlist</h1>
-              <p className="mt-1 text-sm text-gray-600">
-                {job?.job_title
-                  ? `Profils présélectionnés pour : ${job.job_title}`
-                  : "Profils présélectionnés pour cette offre"}
-              </p>
-            </div>
+    <div className="min-h-full bg-[#f4f2ee] py-6">
+      <div className="mx-auto max-w-7xl space-y-5 px-4">
+        <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+          <div className="h-28 bg-gradient-to-r from-[#0a66c2] via-[#378fe9] to-[#70b5f9]" />
 
-            <div className="flex flex-wrap gap-2">
-              <Link
-                to={`/employer/jobs/${jobId}`}
-                className="rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-              >
-                Retour au job dashboard
-              </Link>
+          <div className="px-6 pb-6 pt-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+                  Shortlist Management
+                </div>
 
-              <Link
-                to={`/employer/jobs/${jobId}/applicants`}
-                className="rounded-full border border-[#0a66c2] px-5 py-2.5 text-sm font-semibold text-[#0a66c2] transition hover:bg-[#e8f3ff]"
-              >
-                Voir tous les candidats
-              </Link>
+                <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+                  Shortlist
+                </h1>
+                <p className="mt-2 text-sm text-slate-600">
+                  {job?.job_title
+                    ? `Preselected candidates for: ${job.job_title}`
+                    : "Preselected candidates for this job post"}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  to={`/employer/jobs/${jobId}`}
+                  className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  Back to Job Dashboard
+                </Link>
+
+                <Link
+                  to={`/employer/jobs/${jobId}/applicants`}
+                  className="rounded-full border border-[#0a66c2] px-5 py-3 text-sm font-semibold text-[#0a66c2] transition hover:bg-[#e8f3ff]"
+                >
+                  View All Candidates
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Search + count */}
-        <div className="rounded-2xl border border-[#e0dfdc] bg-white p-4 shadow-sm">
+        <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher par nom ou email..."
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0a66c2]/20 md:max-w-md"
+              placeholder="Search by name or email..."
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#0a66c2] focus:ring-4 focus:ring-[#0a66c2]/10 md:max-w-md"
             />
 
-            <span className="inline-flex rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-semibold text-gray-700">
-              {filteredApplicants.length} profil(s) shortlisté(s)
+            <span className="inline-flex rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
+              {filteredApplicants.length} shortlisted profile(s)
             </span>
           </div>
         </div>
 
-        {/* Content */}
         {loading ? (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-600">Chargement de la shortlist...</p>
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm text-slate-600">Loading shortlist...</p>
           </div>
         ) : error ? (
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+          <div className="rounded-[28px] border border-red-200 bg-white p-6 shadow-sm">
             <p className="text-sm text-red-600">{error}</p>
           </div>
         ) : filteredApplicants.length === 0 ? (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Aucun profil shortlisté
+          <div className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+            <h2 className="text-xl font-semibold text-slate-900">
+              No shortlisted candidates
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
-              Les candidats ajoutés à la shortlist apparaîtront ici.
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Candidates added to the shortlist will appear here.
             </p>
 
             <Link
               to={`/employer/jobs/${jobId}/applicants`}
-              className="mt-4 inline-flex rounded-xl bg-[#0a66c2] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
+              className="mt-5 inline-flex rounded-2xl bg-[#0a66c2] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
             >
-              Aller à la liste des candidats
+              Go to Candidates List
             </Link>
           </div>
         ) : (
-          <div className="grid gap-4 xl:grid-cols-[2.2fr_1fr]">
+          <div className="grid gap-5 xl:grid-cols-[2.2fr_1fr]">
             <div className="space-y-4">
               {filteredApplicants.map((candidate) => (
                 <CandidateCard key={candidate.id} candidate={candidate} />
               ))}
             </div>
 
-            <aside className="space-y-4">
-              <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-                <h2 className="text-sm font-semibold text-gray-900">
-                  Résumé shortlist
+            <aside className="space-y-5">
+              <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  Shortlist Summary
                 </h2>
 
-                <div className="mt-4 space-y-3 text-sm text-gray-700">
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-gray-500">
-                      Offre
+                <div className="mt-5 space-y-4 text-sm text-slate-700">
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Job Post
                     </p>
-                    <p className="mt-1 font-medium text-gray-900">
-                      {job?.job_title || "Offre"}
+                    <p className="mt-1 font-medium text-slate-900">
+                      {job?.job_title || "Job Post"}
                     </p>
                   </div>
 
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-gray-500">
-                      Profils shortlistés
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Shortlisted Profiles
                     </p>
-                    <p className="mt-1">{shortlistedApplicants.length}</p>
+                    <p className="mt-1 font-medium text-slate-900">
+                      {shortlistedApplicants.length}
+                    </p>
                   </div>
 
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-gray-500">
-                      Résultat filtré
+                  <div className="rounded-2xl bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Filtered Result
                     </p>
-                    <p className="mt-1">{filteredApplicants.length}</p>
+                    <p className="mt-1 font-medium text-slate-900">
+                      {filteredApplicants.length}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-                <h2 className="text-sm font-semibold text-gray-900">Conseil</h2>
-                <p className="mt-3 text-sm leading-6 text-gray-600">
-                  Utilise cette shortlist pour suivre les profils les plus pertinents
-                  et accélérer ta phase de présélection.
+              <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  Tip
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-slate-600">
+                  Use this shortlist to track the most relevant candidates and
+                  speed up your preselection process.
                 </p>
               </div>
             </aside>

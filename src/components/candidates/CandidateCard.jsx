@@ -80,38 +80,45 @@ export default function CandidateCard({ candidate }) {
 
   const statusStyle =
     status === "Available"
-      ? "bg-green-50 text-green-700 ring-green-200"
+      ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
       : status === "Looking for opportunities"
       ? "bg-blue-50 text-blue-700 ring-blue-200"
-      : "bg-gray-50 text-gray-700 ring-gray-200";
+      : "bg-slate-50 text-slate-700 ring-slate-200";
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#e0dfdc] bg-white shadow-sm transition hover:shadow-md">
-      <div className="h-14 bg-gradient-to-r from-[#dbeafe] via-[#e0f2fe] to-[#f1f5f9]" />
+    <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+      <div className="h-20 bg-gradient-to-r from-[#0a66c2] via-[#378fe9] to-[#70b5f9]" />
 
-      <div className="p-4">
+      <div className="p-5">
         <div className="flex items-start gap-4">
-          <div className="-mt-9 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#0a66c2] text-base font-bold text-white ring-4 ring-white">
+          <div className="-mt-12 flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl bg-[#0a66c2] text-lg font-bold text-white ring-4 ring-white shadow-lg">
             {initials}
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate text-lg font-semibold text-gray-900">
+                <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-[11px] font-semibold text-[#0a66c2]">
+                  Candidate Profile
+                </div>
+
+                <h3 className="mt-3 truncate text-xl font-bold tracking-tight text-slate-900">
                   {fullName}
                 </h3>
-                <p className="truncate text-sm text-gray-700">{title}</p>
 
-                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-600">
+                <p className="truncate text-sm font-medium text-slate-700">
+                  {title}
+                </p>
+
+                <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-600">
                   <span>{location}</span>
-                  <span className="text-gray-300">•</span>
+                  <span className="text-slate-300">•</span>
                   <span>{experienceLevel}</span>
-                  <span className="text-gray-300">•</span>
+                  <span className="text-slate-300">•</span>
                   <span>{lastActive}</span>
 
                   <span
-                    className={`ml-1 rounded-full px-2 py-0.5 text-xs ring-1 ${statusStyle}`}
+                    className={`ml-1 rounded-full px-2.5 py-0.5 text-xs ring-1 ${statusStyle}`}
                   >
                     {status}
                   </span>
@@ -119,7 +126,7 @@ export default function CandidateCard({ candidate }) {
               </div>
 
               <button
-                className="rounded-full px-2 py-1 text-gray-500 hover:bg-gray-100"
+                className="rounded-full px-2 py-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
                 title="More options"
                 type="button"
               >
@@ -128,11 +135,11 @@ export default function CandidateCard({ candidate }) {
             </div>
 
             {skills.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {skills.slice(0, 10).map((s) => (
                   <span
                     key={s}
-                    className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-gray-700"
+                    className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
                   >
                     {s}
                   </span>
@@ -145,11 +152,11 @@ export default function CandidateCard({ candidate }) {
             <button
               onClick={handleShortlist}
               disabled={shortlistLoading}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`rounded-full px-4 py-2.5 text-sm font-semibold transition ${
                 isShortlisted
                   ? "bg-[#0a66c2] text-white hover:bg-[#004182]"
                   : "border border-[#0a66c2] text-[#0a66c2] hover:bg-[#e8f3ff]"
-              } ${shortlistLoading ? "opacity-60 cursor-not-allowed" : ""}`}
+              } ${shortlistLoading ? "cursor-not-allowed opacity-60" : ""}`}
               type="button"
             >
               {shortlistLoading
@@ -160,7 +167,7 @@ export default function CandidateCard({ candidate }) {
             </button>
 
             <button
-              className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              className="rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
               type="button"
               onClick={() => alert("To be connected later: messaging")}
             >
@@ -170,7 +177,7 @@ export default function CandidateCard({ candidate }) {
             {cvId ? (
               <button
                 onClick={handleDownloadCv}
-                className="rounded-full border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                className="rounded-full border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 type="button"
                 title={cvFileName || "Download CV"}
               >
@@ -179,7 +186,7 @@ export default function CandidateCard({ candidate }) {
             ) : (
               <button
                 disabled
-                className="cursor-not-allowed rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-400"
+                className="cursor-not-allowed rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-400"
                 title="CV not available"
                 type="button"
               >
@@ -189,15 +196,15 @@ export default function CandidateCard({ candidate }) {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2 md:hidden">
+        <div className="mt-5 flex flex-wrap gap-2 md:hidden">
           <button
             onClick={handleShortlist}
             disabled={shortlistLoading}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+            className={`rounded-full px-4 py-2.5 text-sm font-semibold transition ${
               isShortlisted
                 ? "bg-[#0a66c2] text-white hover:bg-[#004182]"
                 : "border border-[#0a66c2] text-[#0a66c2] hover:bg-[#e8f3ff]"
-            } ${shortlistLoading ? "opacity-60 cursor-not-allowed" : ""}`}
+            } ${shortlistLoading ? "cursor-not-allowed opacity-60" : ""}`}
             type="button"
           >
             {shortlistLoading
@@ -208,7 +215,7 @@ export default function CandidateCard({ candidate }) {
           </button>
 
           <button
-            className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            className="rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             type="button"
             onClick={() => alert("To be connected later: messaging")}
           >
@@ -218,7 +225,7 @@ export default function CandidateCard({ candidate }) {
           {cvId ? (
             <button
               onClick={handleDownloadCv}
-              className="rounded-full border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              className="rounded-full border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
               type="button"
             >
               Download CV
@@ -226,7 +233,7 @@ export default function CandidateCard({ candidate }) {
           ) : (
             <button
               disabled
-              className="cursor-not-allowed rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-400"
+              className="cursor-not-allowed rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-400"
               title="CV not available"
               type="button"
             >
@@ -236,14 +243,14 @@ export default function CandidateCard({ candidate }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-[#e0dfdc] px-4 py-3 text-xs text-gray-600">
+      <div className="flex items-center justify-between border-t border-slate-200 px-5 py-3 text-xs text-slate-600">
         <span>Profile updated recently</span>
         <button
-          className="font-semibold text-[#0a66c2] hover:underline"
+          className="font-semibold text-[#0a66c2] transition hover:underline"
           type="button"
           onClick={() => alert("To be connected later: candidate profile page")}
         >
-          View profile
+          View Profile
         </button>
       </div>
     </div>

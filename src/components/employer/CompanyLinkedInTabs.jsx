@@ -2,10 +2,18 @@ import React from "react";
 
 const tabs = ["Accueil", "À propos", "Posts", "Emplois", "Personnes"];
 
+const tabLabels = {
+  Accueil: "Home",
+  "À propos": "About",
+  Posts: "Posts",
+  Emplois: "Jobs",
+  Personnes: "People",
+};
+
 export default function CompanyLinkedInTabs({ activeTab, onTabChange }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#e0dfdc] bg-white shadow-sm">
-      <div className="flex flex-wrap gap-1 px-4">
+    <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+      <div className="flex flex-wrap gap-1 px-4 py-1">
         {tabs.map((tab) => {
           const isActive = activeTab === tab;
 
@@ -14,13 +22,21 @@ export default function CompanyLinkedInTabs({ activeTab, onTabChange }) {
               key={tab}
               type="button"
               onClick={() => onTabChange(tab)}
-              className={`border-b-4 px-5 py-4 text-base font-semibold transition ${
+              className={`relative rounded-t-2xl px-5 py-4 text-sm font-semibold transition ${
                 isActive
-                  ? "border-[#057642] text-[#057642]"
-                  : "border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-[#0a66c2]"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
-              {tab}
+              {tabLabels[tab] || tab}
+
+              <span
+                className={`absolute bottom-0 left-1/2 h-[3px] -translate-x-1/2 rounded-full transition-all ${
+                  isActive
+                    ? "w-10 bg-[#0a66c2]"
+                    : "w-0 bg-transparent"
+                }`}
+              />
             </button>
           );
         })}

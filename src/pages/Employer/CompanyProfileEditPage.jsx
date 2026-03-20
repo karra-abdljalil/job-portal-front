@@ -57,7 +57,7 @@ export default function CompanyProfileEditPage() {
 
         setError(
           err?.response?.data?.message ||
-           "Unable to load the company profile."
+            "Unable to load the company profile."
         );
       } finally {
         setLoading(false);
@@ -83,18 +83,18 @@ export default function CompanyProfileEditPage() {
       setError("");
       setSuccess("");
 
-     if (hasCompany) {
-  await updateMyCompany(form);
-  setSuccess("Company profile updated successfully.");
-} else {
-  await createCompany(form);
-  setHasCompany(true);
-  setSuccess("Company profile created successfully.");
+      if (hasCompany) {
+        await updateMyCompany(form);
+        setSuccess("Company profile updated successfully.");
+      } else {
+        await createCompany(form);
+        setHasCompany(true);
+        setSuccess("Company profile created successfully.");
 
-  setTimeout(() => {
-    navigate("/employer/company/profile");
-  }, 800);
-}
+        setTimeout(() => {
+          navigate("/employer/company/profile");
+        }, 800);
+      }
     } catch (err) {
       console.error("company submit error:", err);
       console.error("response data:", err?.response?.data);
@@ -120,33 +120,47 @@ export default function CompanyProfileEditPage() {
     : "Complete your company information to start posting jobs.";
 
   return (
-    <div className="min-h-screen bg-[#f3f2ef] py-8">
+    <div className="min-h-screen bg-[#f4f2ee] py-8">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{pageTitle}</h1>
-            <p className="mt-1 text-sm text-gray-600">{pageDescription}</p>
-          </div>
+        <div className="mb-5 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+          <div className="h-28 bg-gradient-to-r from-[#0a66c2] via-[#378fe9] to-[#70b5f9]" />
 
-          {hasCompany ? (
-            <Link
-              to="/employer/company/profile"
-              className="rounded-full border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition hover:bg-white"
-            >
-              ← Back to Profile
-            </Link>
-          ) : (
-            <Link
-              to="/employer/dashboard"
-              className="rounded-full border border-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition hover:bg-white"
-            >
-              ← Back to Dashboard
-            </Link>
-          )}
+          <div className="px-6 pb-6 pt-5">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+                  Company Settings
+                </div>
+
+                <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+                  {pageTitle}
+                </h1>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {pageDescription}
+                </p>
+              </div>
+
+              {hasCompany ? (
+                <Link
+                  to="/employer/company/profile"
+                  className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  ← Back to Profile
+                </Link>
+              ) : (
+                <Link
+                  to="/employer/dashboard"
+                  className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  ← Back to Dashboard
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-          <div className="space-y-4">
+        <div className="grid gap-5 lg:grid-cols-[2fr_1fr]">
+          <div className="space-y-5">
             {hasCompany ? <CompanyLogoUploader /> : null}
 
             <CompanyProfileForm
@@ -160,30 +174,35 @@ export default function CompanyProfileEditPage() {
             />
           </div>
 
-          <aside className="space-y-4">
-            <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900">Tips</h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Provide a clear name, an accurate description, and a correct location.
+          <aside className="space-y-5">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                Tips
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                Provide a clear company name, a strong description, and an
+                accurate location to build a professional brand image.
               </p>
             </div>
 
-            <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
                 Best Practices
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
-                A complete profile builds candidate trust and improves the quality of applications.
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                A complete profile builds candidate trust and improves the
+                quality of applications you receive.
               </p>
             </div>
 
             {!hasCompany ? (
-              <div className="rounded-xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-                <h2 className="text-sm font-semibold text-gray-900">
+              <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
                   Before You Start
                 </h2>
-                <p className="mt-2 text-sm text-gray-600">
-                  Once your company is created, you will be able to add your logo, post jobs, and track applications.
+                <p className="mt-3 text-sm leading-7 text-slate-600">
+                  Once your company is created, you will be able to upload your
+                  logo, publish jobs, and track applications.
                 </p>
               </div>
             ) : null}
