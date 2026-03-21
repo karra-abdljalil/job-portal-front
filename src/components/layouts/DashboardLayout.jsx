@@ -4,16 +4,22 @@ import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { roleNavigateTo } from "@/constants/roleNavigateto";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
-import { Search, Bell, BriefcaseBusiness } from "lucide-react";
+import { Search, Bell, Plus } from "lucide-react";
 import { getCompanyLogo } from "@/services/companyLogo.service";
 import { getMyCompany } from "@/services/company.service";
 
 const pageTitles = {
-  "/employer/dashboard": "Employer Dashboard",
+  "/employer/dashboard": "Dashboard",
   "/employer/company/profile": "Company Profile",
   "/employer/company/profile/edit": "Edit Company Profile",
   "/employer/jobs": "My Jobs",
   "/employer/jobs/create": "Create Job",
+  "/jobseeker/dashboard": "Dashboard",
+  "/jobseeker/profile": "My Profile",
+  "/jobseeker/resumes": "My Resumes",
+  "/jobseeker/applications": "My Applications",
+  "/jobseeker/jobs": "Find Jobs",
+  "/jobseeker/settings": "Settings",
 };
 
 export const Dashboard = () => {
@@ -27,134 +33,102 @@ export const Dashboard = () => {
 
   const currentTitle =
     pageTitles[location.pathname] ||
-    (location.pathname.startsWith("/employer/jobs/")
-      ? "Job Details"
-      : "Dashboard");
-
-  const userInitials =
-    user?.full_name
-      ?.split(" ")
-      .map((word) => word[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "U";
+    (location.pathname.startsWith("/employer/jobs/") ? "Job Details" :
+     location.pathname.startsWith("/jobseeker/jobs/") ? "Job Details" : "Dashboard");
 
   useEffect(() => {
     let objectUrl = null;
-
     const loadEmployerHeaderData = async () => {
       if (user?.role !== "employer") {
         setCompany(null);
         setCompanyLogoUrl("");
         return;
       }
-
       try {
         const companyRes = await getMyCompany();
         const companyData = companyRes?.company || companyRes?.data?.company || null;
         setCompany(companyData);
-
         if (companyData?.id) {
           try {
             const blob = await getCompanyLogo();
             objectUrl = URL.createObjectURL(blob);
             setCompanyLogoUrl(objectUrl);
-          } catch (logoErr) {
-            console.warn("Impossible de charger le logo entreprise :", logoErr);
-            setCompanyLogoUrl("");
-          }
-        } else {
-          setCompanyLogoUrl("");
-        }
-      } catch (err) {
-        console.error("Erreur chargement company header:", err);
-        setCompany(null);
-        setCompanyLogoUrl("");
-      }
+          } catch { setCompanyLogoUrl(""); }
+        } else { setCompanyLogoUrl(""); }
+      } catch { setCompany(null); setCompanyLogoUrl(""); }
     };
-
     loadEmployerHeaderData();
-
-    return () => {
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-      }
-    };
+    return () => { if (objectUrl) URL.revokeObjectURL(objectUrl); };
   }, [user?.role]);
 
-  const companyInitial =
-    company?.company_name?.trim()?.charAt(0)?.toUpperCase() || "C";
+  const companyInitial = company?.company_name?.trim()?.charAt(0)?.toUpperCase() || "C";
+  const userInitials = user?.full_name?.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "U";
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-[#f3f2ef]">
+      <div className="flex min-h-screen w-full bg-slate-50">
         <AppSidebar items={navigateto} />
 
         <main className="flex-1 overflow-auto">
-          <header className="sticky top-0 z-20 border-b border-[#e0dfdc] bg-white/95 backdrop-blur">
-            <div className="flex h-16 items-center justify-between gap-4 px-4 md:px-6">
+
+          {/* ── Header ── */}
+          <header className="sticky top-0 z-20 border-b border-slate-100 bg-white/95 backdrop-blur shadow-sm">
+            <div className="flex h-14 items-center justify-between gap-4 px-5">
+
+              {/* Left */}
               <div className="flex items-center gap-3">
-                <SidebarTrigger />
-                <div>
-                  <h1 className="text-lg font-bold text-gray-900">
-                    {currentTitle}
-                  </h1>
-                  <p className="text-xs text-gray-500">
-                    Welcome back{user?.full_name ? `, ${user.full_name}` : ""}
-                  </p>
-                </div>
+                <SidebarTrigger className="text-slate-500 hover:text-slate-800" />
+                <div className="h-5 w-px bg-slate-200" />
+                <h1 className="text-sm font-bold text-slate-900">{currentTitle}</h1>
               </div>
 
-              <div className="hidden max-w-xl flex-1 items-center md:flex">
+              {/* Center - Search */}
+              <div className="hidden md:flex flex-1 max-w-sm mx-6">
                 <div className="relative w-full">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="Search jobs, candidates..."
-                    className="w-full rounded-full border border-[#d0d7de] bg-[#f8fafc] py-2 pl-10 pr-4 text-sm outline-none transition focus:border-[#0a66c2] focus:bg-white"
+                    placeholder="Search..."
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  className="hidden rounded-full border border-[#d0d7de] p-2 text-gray-600 transition hover:bg-gray-50 md:inline-flex"
-                >
-                  <Bell className="h-4 w-4" />
+              {/* Right */}
+              <div className="flex items-center gap-2">
+
+                {/* Notification bell */}
+                <button className="w-8 h-8 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors">
+                  <Bell size={15} />
                 </button>
 
+                {/* Create Job button - employer only */}
                 {user?.role === "employer" && (
                   <Link
                     to="/employer/jobs/create"
-                    className="hidden rounded-full bg-[#0a66c2] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#004182] md:inline-flex"
+                    className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-colors"
                   >
-                    <BriefcaseBusiness className="mr-2 h-4 w-4" />
-                    Create Job
+                    <Plus size={13} /> New Job
                   </Link>
                 )}
 
-                <div className="flex items-center gap-3 rounded-2xl border border-[#e0dfdc] bg-white px-3 py-2 shadow-sm">
-                  <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[#e0dfdc] bg-white">
-                    {companyLogoUrl ? (
-                      <img
-                        src={companyLogoUrl}
-                        alt="Company logo"
-                        className="h-full w-full object-cover"
-                      />
+                {/* User/Company card */}
+                <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200 ml-1">
+                  <div className="w-8 h-8 rounded-xl overflow-hidden border border-slate-200 shrink-0">
+                    {companyLogoUrl && user?.role === "employer" ? (
+                      <img src={companyLogoUrl} alt="logo" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[#0a66c2] text-sm font-bold text-white">
-                        {companyInitial}
+                      <div className="w-full h-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+                        {user?.role === "employer" ? companyInitial : userInitials}
                       </div>
                     )}
                   </div>
-
-                  <div className="hidden min-w-[160px] md:block">
-                    <p className="text-sm font-semibold text-gray-900">
-                      {company?.company_name || "Entreprise"}
+                  <div className="hidden md:block">
+                    <p className="text-xs font-bold text-slate-900 leading-tight">
+                      {user?.role === "employer" ? (company?.company_name || "Company") : user?.full_name}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {user?.full_name || "Employer"}
+                    <p className="text-xs text-slate-400 leading-tight capitalize">
+                      {user?.role?.replace("_", " ")}
                     </p>
                   </div>
                 </div>
@@ -162,7 +136,8 @@ export const Dashboard = () => {
             </div>
           </header>
 
-          <div className="p-4 md:p-6">
+          {/* ── Content ── */}
+          <div className="p-5">
             <Outlet />
           </div>
         </main>
