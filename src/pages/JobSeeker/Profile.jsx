@@ -7,153 +7,12 @@ import { fetchEducations, addEducationThunk, updateEducationThunk, deleteEducati
 import { fetchLanguages, addLanguageThunk, deleteLanguageThunk } from "@/Redux/languageSlice";
 import { fetchCertifications, createCertificationThunk, updateCertificationThunk, deleteCertificationThunk } from "@/Redux/certificationSlice";
 import {
-  Code2, Briefcase, GraduationCap, Award, Globe2, Star,
-  Pencil, Plus, Trash2, X, Check, Camera, MapPin, Mail,
-  Building2, Calendar, Link, Hash, ChevronRight, Terminal
+  Briefcase, GraduationCap, Award, Globe, Star,
+  Pencil, Plus, Trash2, X, Check, Camera, Mail,
+  Building2, Calendar, Link, ChevronRight, User,
+  BookOpen, Languages, BadgeCheck
 } from "lucide-react";
 
-// ─── Design Tokens ────────────────────────────────────────────────────────────
-const colors = {
-  primary: "#2563EB",
-  primaryLight: "#DBEAFE",
-  primaryMid: "#93C5FD",
-  accent: "#0EA5E9",
-  text: "#0F172A",
-  textMid: "#475569",
-  textLight: "#94A3B8",
-  border: "#E2E8F0",
-  bg: "#F8FAFC",
-  white: "#FFFFFF",
-  success: "#10B981",
-  successLight: "#D1FAE5",
-};
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-const Avatar = ({ user }) => (
-  <div style={{
-    width: 88, height: 88, borderRadius: "50%",
-    background: `linear-gradient(135deg, ${colors.primary}, ${colors.accent})`,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    color: "white", fontSize: 32, fontWeight: 700,
-    overflow: "hidden", border: "3px solid white",
-    boxShadow: "0 4px 20px rgba(37,99,235,0.25)"
-  }}>
-    {user?.profile_picture
-      ? <img src={`http://localhost:5000/${user.profile_picture}`} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      : <span>{user?.full_name?.[0]?.toUpperCase() || "U"}</span>}
-  </div>
-);
-
-const Tag = ({ children, color = colors.primaryLight, textColor = colors.primary }) => (
-  <span style={{
-    background: color, color: textColor,
-    padding: "3px 10px", borderRadius: 20,
-    fontSize: 11, fontWeight: 600, letterSpacing: "0.02em"
-  }}>
-    {children}
-  </span>
-);
-
-const Card = ({ children, style = {} }) => (
-  <div style={{
-    background: colors.white, borderRadius: 14,
-    border: `1px solid ${colors.border}`,
-    boxShadow: "0 1px 4px rgba(15,23,42,0.06)",
-    padding: 24, ...style
-  }}>
-    {children}
-  </div>
-);
-
-const SectionHeader = ({ icon: Icon, title, onAdd }) => (
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <div style={{
-        width: 32, height: 32, borderRadius: 8,
-        background: colors.primaryLight,
-        display: "flex", alignItems: "center", justifyContent: "center"
-      }}>
-        <Icon size={16} color={colors.primary} />
-      </div>
-      <span style={{ fontSize: 14, fontWeight: 700, color: colors.text, letterSpacing: "-0.01em" }}>{title}</span>
-    </div>
-    {onAdd && (
-      <button onClick={onAdd} style={{
-        display: "flex", alignItems: "center", gap: 4,
-        fontSize: 12, fontWeight: 600, color: colors.primary,
-        background: colors.primaryLight, border: "none",
-        padding: "5px 10px", borderRadius: 8, cursor: "pointer"
-      }}>
-        <Plus size={13} /> Add
-      </button>
-    )}
-  </div>
-);
-
-const Modal = ({ title, onClose, children }) => (
-  <div style={{
-    position: "fixed", inset: 0, background: "rgba(15,23,42,0.5)",
-    zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16
-  }}>
-    <div style={{
-      background: colors.white, borderRadius: 18,
-      boxShadow: "0 20px 60px rgba(15,23,42,0.2)",
-      width: "100%", maxWidth: 480, padding: 28
-    }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <span style={{ fontSize: 15, fontWeight: 700, color: colors.text }}>{title}</span>
-        <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight }}>
-          <X size={18} />
-        </button>
-      </div>
-      {children}
-    </div>
-  </div>
-);
-
-const Input = ({ label, value, onChange, type = "text", disabled = false, placeholder = "" }) => (
-  <div style={{ marginBottom: 12 }}>
-    <label style={{ fontSize: 11, fontWeight: 600, color: colors.textMid, display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-      {label}
-    </label>
-    <input
-      type={type} value={value} onChange={onChange} disabled={disabled} placeholder={placeholder}
-      style={{
-        width: "100%", padding: "9px 12px", fontSize: 13,
-        border: `1.5px solid ${disabled ? colors.bg : colors.border}`,
-        borderRadius: 9, outline: "none", boxSizing: "border-box",
-        background: disabled ? colors.bg : colors.white,
-        color: disabled ? colors.textLight : colors.text,
-        transition: "border-color 0.15s"
-      }}
-      onFocus={e => !disabled && (e.target.style.borderColor = colors.primary)}
-      onBlur={e => e.target.style.borderColor = colors.border}
-    />
-  </div>
-);
-
-const Btn = ({ children, onClick, variant = "primary", type = "button", disabled = false, style = {} }) => {
-  const styles = {
-    primary: { background: colors.primary, color: "white", border: "none" },
-    outline: { background: "white", color: colors.primary, border: `1.5px solid ${colors.primary}` },
-    ghost: { background: "transparent", color: colors.textMid, border: "none" },
-    danger: { background: "#FEF2F2", color: "#DC2626", border: "none" },
-  };
-  return (
-    <button type={type} onClick={onClick} disabled={disabled} style={{
-      ...styles[variant], padding: "9px 16px", borderRadius: 9,
-      fontSize: 12, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer",
-      display: "flex", alignItems: "center", gap: 6, opacity: disabled ? 0.5 : 1,
-      transition: "opacity 0.15s", ...style
-    }}>
-      {children}
-    </button>
-  );
-};
-
-const Divider = () => <div style={{ height: 1, background: colors.border, margin: "14px 0" }} />;
-
-// ─── Constants ────────────────────────────────────────────────────────────────
 const EMPTY_EXP = { job_title: "", company_name: "", description: "", start_date: "", end_date: "" };
 const EMPTY_EDU = { title: "", university: "", degree: "Bachelor", start_date: "", end_date: "" };
 const EMPTY_LANG = { language: "", level: "Beginner" };
@@ -161,7 +20,61 @@ const EMPTY_CERT = { title: "", issuer: "", credential_id: "", credential_url: "
 const DEGREES = ["Bachelor", "Master", "PhD", "Associate", "High School", "Other"];
 const LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Components ───────────────────────────────────────────────────────────────
+
+const Avatar = ({ user }) => (
+  <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold overflow-hidden ring-4 ring-white shadow-md">
+    {user?.profile_picture
+      ? <img src={`http://localhost:5000/${user.profile_picture}`} alt="avatar" className="w-full h-full object-cover" />
+      : <span>{user?.full_name?.[0]?.toUpperCase() || "U"}</span>}
+  </div>
+);
+
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-5 ${className}`}>
+    {children}
+  </div>
+);
+
+const SectionHeader = ({ icon: Icon, title, onAdd }) => (
+  <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center gap-2">
+      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+        <Icon size={15} className="text-blue-600" />
+      </div>
+      <span className="text-sm font-bold text-slate-800">{title}</span>
+    </div>
+    {onAdd && (
+      <button onClick={onAdd} className="flex items-center gap-1 text-xs font-600 text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors">
+        <Plus size={13} /> Add
+      </button>
+    )}
+  </div>
+);
+
+const Modal = ({ title, onClose, children }) => (
+  <div className="fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+      <div className="flex items-center justify-between mb-5">
+        <span className="text-sm font-bold text-slate-800">{title}</span>
+        <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+      </div>
+      {children}
+    </div>
+  </div>
+);
+
+const Field = ({ label, value, onChange, type = "text", disabled = false }) => (
+  <div className="mb-3">
+    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1">{label}</label>
+    <input type={type} value={value} onChange={onChange} disabled={disabled}
+      className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm disabled:bg-slate-50 disabled:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all"
+    />
+  </div>
+);
+
+const Divider = () => <div className="h-px bg-slate-100 my-3" />;
+
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((s) => s.profile);
@@ -199,9 +112,7 @@ export default function ProfilePage() {
     load();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (user) setForm({ full_name: user.full_name || "" });
-  }, [user]);
+  useEffect(() => { if (user) setForm({ full_name: user.full_name || "" }); }, [user]);
 
   const handleSaveProfile = () => { dispatch(updateProfileThunk(form)); setEditMode(false); };
   const handlePicture = (e) => { const f = e.target.files[0]; if (f) dispatch(uploadPictureThunk(f)); };
@@ -256,122 +167,76 @@ export default function ProfilePage() {
   const mySkillIds = mySkills.map((s) => s.id);
 
   if (loading && !user) return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
-      <div style={{ width: 36, height: 36, border: `3px solid ${colors.primaryLight}`, borderTopColor: colors.primary, borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+    <div className="flex items-center justify-center h-64">
+      <div className="w-8 h-8 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div style={{ maxWidth: 960, margin: "0 auto", padding: "24px 20px", fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}>
+    <div className="max-w-5xl mx-auto space-y-5 p-6">
 
-      {/* ── Header ── */}
-      <div style={{
-        background: `linear-gradient(135deg, #1D4ED8 0%, #0EA5E9 100%)`,
-        borderRadius: 18, overflow: "hidden", marginBottom: 20,
-        boxShadow: "0 4px 24px rgba(29,78,216,0.2)"
-      }}>
-        {/* Top dots decoration */}
-        <div style={{ padding: "28px 28px 20px", position: "relative" }}>
-          <div style={{ position: "absolute", top: 16, right: 20, display: "flex", gap: 6, opacity: 0.3 }}>
-            {[...Array(5)].map((_, i) => (
-              <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "white" }} />
-            ))}
+      {/* ── Header Banner ── */}
+      <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100">
+        <div className="h-28 bg-gradient-to-r from-blue-500 to-sky-400 mb-3" />
+        <div className="px-6 pb-5 -mt-10 flex items-end justify-between gap-4 flex-wrap">
+          <div className="flex items-end gap-4">
+            <Avatar user={user} />
+            <div className="mb-1">
+              <h1 className="text-lg font-bold text-slate-900">{user?.full_name}</h1>
+              <p className="text-sm text-slate-500">
+                {user?.role && <span className="capitalize">{user.role.replace("_", " ")} • </span>}
+                <Mail size={11} className="inline mr-1" />
+                {user?.email}
+              </p>
+            </div>
           </div>
-
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 18 }}>
-              <Avatar user={user} />
-              <div style={{ paddingBottom: 4 }}>
-                <h1 style={{ color: "white", fontSize: 22, fontWeight: 800, margin: 0, letterSpacing: "-0.02em" }}>
-                  {user?.full_name}
-                </h1>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 5 }}>
-                  <span style={{
-                    background: "rgba(255,255,255,0.2)", color: "white",
-                    padding: "2px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
-                    textTransform: "capitalize", backdropFilter: "blur(4px)"
-                  }}>
-                    {user?.role?.replace("_", " ")}
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.8)", fontSize: 12 }}>
-                    <Mail size={11} style={{ display: "inline", marginRight: 4 }} />
-                    {user?.email}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", gap: 8, paddingBottom: 4 }}>
-              <label style={{
-                display: "flex", alignItems: "center", gap: 6,
-                background: "rgba(255,255,255,0.15)", color: "white",
-                padding: "8px 14px", borderRadius: 9, fontSize: 12, fontWeight: 600,
-                cursor: "pointer", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.2)"
-              }}>
-                <Camera size={13} /> Change Photo
-                <input type="file" accept="image/*" style={{ display: "none" }} onChange={handlePicture} />
-              </label>
-              <button
-                onClick={() => editMode ? handleSaveProfile() : setEditMode(true)}
-                style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  background: "white", color: colors.primary,
-                  padding: "8px 16px", borderRadius: 9, fontSize: 12, fontWeight: 700,
-                  cursor: "pointer", border: "none", boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-                }}
-              >
-                {editMode ? <><Check size={13} /> Save Changes</> : <><Pencil size={13} /> Edit Profile</>}
+          <div className="flex gap-2 mb-1">
+            <label className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 transition-colors">
+              <Camera size={13} /> Change Photo
+              <input type="file" accept="image/*" className="hidden" onChange={handlePicture} />
+            </label>
+            <button
+              onClick={() => editMode ? handleSaveProfile() : setEditMode(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+            >
+              {editMode ? <><Check size={13} /> Save</> : <><Pencil size={13} /> Edit Profile</>}
+            </button>
+            {editMode && (
+              <button onClick={() => setEditMode(false)} className="px-3 py-1.5 text-xs font-semibold border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                Cancel
               </button>
-              {editMode && (
-                <button onClick={() => setEditMode(false)} style={{
-                  background: "rgba(255,255,255,0.15)", color: "white",
-                  padding: "8px 14px", borderRadius: 9, fontSize: 12, fontWeight: 600,
-                  cursor: "pointer", border: "1px solid rgba(255,255,255,0.2)"
-                }}>
-                  Cancel
-                </button>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* ── Body ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
         {/* ── Left ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="space-y-5">
 
           {/* Personal Info */}
           <Card>
-            <SectionHeader icon={Terminal} title="Personal Info" />
-            <Input label="Full Name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} disabled={!editMode} />
-            <Input label="Email" value={user?.email || ""} disabled />
-            <Input label="Role" value={user?.role?.replace("_", " ") || ""} disabled />
+            <SectionHeader icon={User} title="Personal Information" />
+            <Field label="Full Name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} disabled={!editMode} />
+            <Field label="Email" value={user?.email || ""} disabled />
+            <Field label="Role" value={user?.role?.replace("_", " ") || ""} disabled />
           </Card>
 
           {/* Skills */}
           <Card>
-            <SectionHeader icon={Code2} title="Skills & Expertise" onAdd={() => setSkillOpen(true)} />
+            <SectionHeader icon={Star} title="Skills & Expertise" onAdd={() => setSkillOpen(true)} />
             {mySkills.length === 0
-              ? <p style={{ fontSize: 12, color: colors.textLight, fontStyle: "italic" }}>No skills added yet.</p>
-              : <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              ? <p className="text-xs text-slate-400 italic">No skills added yet.</p>
+              : <div className="flex flex-wrap gap-1.5">
                   {mySkills.map((skill) => (
-                    <div key={skill.id} className="skill-tag" style={{
-                      display: "flex", alignItems: "center", gap: 5,
-                      background: colors.primaryLight, color: colors.primary,
-                      padding: "4px 10px", borderRadius: 20,
-                      fontSize: 11, fontWeight: 600, position: "relative"
-                    }}>
-                      <Hash size={10} />
+                    <span key={skill.id} className="flex items-center gap-1 bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-xs font-semibold group">
                       {skill.name}
-                      <button onClick={() => dispatch(removeSkillThunk(skill.id))} style={{
-                        background: "none", border: "none", cursor: "pointer",
-                        color: colors.primary, padding: 0, display: "flex", marginLeft: 2
-                      }}>
+                      <button onClick={() => dispatch(removeSkillThunk(skill.id))} className="opacity-0 group-hover:opacity-100 text-blue-400 hover:text-red-500 transition-opacity">
                         <X size={10} />
                       </button>
-                    </div>
+                    </span>
                   ))}
                 </div>
             }
@@ -379,20 +244,17 @@ export default function ProfilePage() {
 
           {/* Languages */}
           <Card>
-            <SectionHeader icon={Globe2} title="Languages" onAdd={openAddLang} />
+            <SectionHeader icon={Globe} title="Languages" onAdd={openAddLang} />
             {languages.length === 0
-              ? <p style={{ fontSize: 12, color: colors.textLight, fontStyle: "italic" }}>No languages added yet.</p>
-              : <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              ? <p className="text-xs text-slate-400 italic">No languages added yet.</p>
+              : <div className="space-y-3">
                   {languages.map((lang) => (
-                    <div key={lang.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div key={lang.id} className="flex items-center justify-between">
                       <div>
-                        <p style={{ fontSize: 13, fontWeight: 600, color: colors.text, margin: 0 }}>{lang.language}</p>
-                        <p style={{ fontSize: 11, color: colors.textLight, margin: 0 }}>{lang.level}</p>
+                        <p className="text-sm font-semibold text-slate-800">{lang.language}</p>
+                        <p className="text-xs text-slate-400">{lang.level}</p>
                       </div>
-                      <button onClick={() => dispatch(deleteLanguageThunk(lang.id))} style={{
-                        background: "none", border: "none", cursor: "pointer", color: colors.textLight,
-                        padding: 4, borderRadius: 6, display: "flex"
-                      }}>
+                      <button onClick={() => dispatch(deleteLanguageThunk(lang.id))} className="text-slate-300 hover:text-red-500 transition-colors">
                         <Trash2 size={13} />
                       </button>
                     </div>
@@ -400,53 +262,42 @@ export default function ProfilePage() {
                 </div>
             }
           </Card>
-
         </div>
 
         {/* ── Right ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="lg:col-span-2 space-y-5">
 
           {/* Experience */}
           <Card>
             <SectionHeader icon={Briefcase} title="Work Experience" onAdd={openAddExp} />
             {experiences.length === 0
-              ? <p style={{ fontSize: 12, color: colors.textLight, fontStyle: "italic" }}>No experience added yet.</p>
-              : <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              ? <p className="text-xs text-slate-400 italic">No experience added yet.</p>
+              : <div className="space-y-4">
                   {experiences.map((exp, idx) => (
                     <div key={exp.id}>
                       {idx > 0 && <Divider />}
-                      <div style={{ display: "flex", gap: 12 }} className="group-item">
-                        <div style={{
-                          width: 38, height: 38, borderRadius: 10,
-                          background: colors.primaryLight, color: colors.primary,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontWeight: 800, fontSize: 14, flexShrink: 0
-                        }}>
+                      <div className="flex gap-3 group">
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">
                           {exp.company_name?.[0]?.toUpperCase()}
                         </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
                             <div>
-                              <p style={{ fontSize: 13, fontWeight: 700, color: colors.text, margin: 0 }}>{exp.job_title}</p>
-                              <p style={{ fontSize: 12, color: colors.primary, fontWeight: 600, margin: "2px 0" }}>
-                                <Building2 size={10} style={{ display: "inline", marginRight: 4 }} />
-                                {exp.company_name}
+                              <p className="text-sm font-bold text-slate-900">{exp.job_title}</p>
+                              <p className="text-xs font-semibold text-blue-600 flex items-center gap-1 mt-0.5">
+                                <Building2 size={10} /> {exp.company_name}
                               </p>
-                              <p style={{ fontSize: 11, color: colors.textLight, margin: 0 }}>
-                                <Calendar size={10} style={{ display: "inline", marginRight: 4 }} />
+                              <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                                <Calendar size={10} />
                                 {exp.start_date?.slice(0, 7)} — {exp.end_date ? exp.end_date?.slice(0, 7) : "Present"}
                               </p>
                             </div>
-                            <div style={{ display: "flex", gap: 4 }}>
-                              <button onClick={() => openEditExp(exp)} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4, borderRadius: 6 }}>
-                                <Pencil size={13} />
-                              </button>
-                              <button onClick={() => dispatch(deleteExperienceThunk(exp.id))} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4, borderRadius: 6 }}>
-                                <Trash2 size={13} />
-                              </button>
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                              <button onClick={() => openEditExp(exp)} className="text-slate-400 hover:text-blue-600 p-1 rounded-lg"><Pencil size={13} /></button>
+                              <button onClick={() => dispatch(deleteExperienceThunk(exp.id))} className="text-slate-400 hover:text-red-500 p-1 rounded-lg"><Trash2 size={13} /></button>
                             </div>
                           </div>
-                          {exp.description && <p style={{ fontSize: 12, color: colors.textMid, margin: "6px 0 0", lineHeight: 1.6 }}>{exp.description}</p>}
+                          {exp.description && <p className="text-xs text-slate-500 mt-2 leading-relaxed">{exp.description}</p>}
                         </div>
                       </div>
                     </div>
@@ -459,29 +310,23 @@ export default function ProfilePage() {
           <Card>
             <SectionHeader icon={GraduationCap} title="Education" onAdd={openAddEdu} />
             {educations.length === 0
-              ? <p style={{ fontSize: 12, color: colors.textLight, fontStyle: "italic" }}>No education added yet.</p>
-              : <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              ? <p className="text-xs text-slate-400 italic">No education added yet.</p>
+              : <div className="space-y-4">
                   {educations.map((edu, idx) => (
                     <div key={edu.id}>
                       {idx > 0 && <Divider />}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div className="flex items-start justify-between gap-2 group">
                         <div>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: colors.text, margin: 0 }}>{edu.title}</p>
-                          <p style={{ fontSize: 12, color: colors.primary, fontWeight: 600, margin: "2px 0" }}>{edu.university}</p>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 3 }}>
-                            <Tag>{edu.degree}</Tag>
-                            <span style={{ fontSize: 11, color: colors.textLight }}>
-                              {edu.start_date?.slice(0, 7)} — {edu.end_date?.slice(0, 7)}
-                            </span>
+                          <p className="text-sm font-bold text-slate-900">{edu.title}</p>
+                          <p className="text-xs font-semibold text-blue-600 mt-0.5">{edu.university}</p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-semibold">{edu.degree}</span>
+                            <span className="text-xs text-slate-400">{edu.start_date?.slice(0, 7)} — {edu.end_date?.slice(0, 7)}</span>
                           </div>
                         </div>
-                        <div style={{ display: "flex", gap: 4 }}>
-                          <button onClick={() => openEditEdu(edu)} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4 }}>
-                            <Pencil size={13} />
-                          </button>
-                          <button onClick={() => dispatch(deleteEducationThunk(edu.id))} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4 }}>
-                            <Trash2 size={13} />
-                          </button>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                          <button onClick={() => openEditEdu(edu)} className="text-slate-400 hover:text-blue-600 p-1"><Pencil size={13} /></button>
+                          <button onClick={() => dispatch(deleteEducationThunk(edu.id))} className="text-slate-400 hover:text-red-500 p-1"><Trash2 size={13} /></button>
                         </div>
                       </div>
                     </div>
@@ -492,73 +337,58 @@ export default function ProfilePage() {
 
           {/* Certifications */}
           <Card>
-            <SectionHeader icon={Award} title="Certifications" onAdd={openAddCert} />
+            <SectionHeader icon={BadgeCheck} title="Certifications" onAdd={openAddCert} />
             {certifications.length === 0
-              ? <p style={{ fontSize: 12, color: colors.textLight, fontStyle: "italic" }}>No certifications added yet.</p>
-              : <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              ? <p className="text-xs text-slate-400 italic">No certifications added yet.</p>
+              : <div className="space-y-4">
                   {certifications.map((cert, idx) => {
                     const fileUrl = cert.certif_path
                       ? `http://localhost:5000/uploaded_files/${cert.certif_path.split("uploaded_files/")[1] || cert.certif_path}`
                       : null;
                     const isImage = fileUrl && /\.(jpg|jpeg|png)$/i.test(fileUrl);
                     const isPdf = fileUrl && /\.pdf$/i.test(fileUrl);
-
                     return (
                       <div key={cert.id}>
                         {idx > 0 && <Divider />}
-                        <div style={{ display: "flex", gap: 12 }}>
-                          {/* Thumbnail */}
-                          <div style={{
-                            width: 52, height: 52, borderRadius: 10,
-                            border: `1px solid ${colors.border}`,
-                            overflow: "hidden", flexShrink: 0,
-                            background: colors.bg, display: "flex", alignItems: "center", justifyContent: "center"
-                          }}>
-                            {isImage ? (
-                              <a href={fileUrl} target="_blank" rel="noreferrer">
-                                <img src={fileUrl} alt={cert.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                              </a>
-                            ) : isPdf ? (
-                              <a href={fileUrl} target="_blank" rel="noreferrer" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}>
-                                <span style={{ fontSize: 20 }}>📄</span>
-                                <span style={{ fontSize: 9, color: colors.textLight }}>PDF</span>
-                              </a>
-                            ) : (
-                              <Award size={20} color={colors.textLight} />
-                            )}
+                        <div className="flex gap-3 group">
+                          <div className="w-12 h-12 rounded-xl border border-slate-100 overflow-hidden shrink-0 bg-slate-50 flex items-center justify-center">
+                            {isImage
+                              ? <a href={fileUrl} target="_blank" rel="noreferrer"><img src={fileUrl} alt={cert.title} className="w-full h-full object-cover" /></a>
+                              : isPdf
+                                ? <a href={fileUrl} target="_blank" rel="noreferrer" className="flex flex-col items-center">
+                                    <BookOpen size={16} className="text-red-500" />
+                                    <span className="text-xs text-slate-400">PDF</span>
+                                  </a>
+                                : <Award size={18} className="text-slate-300" />
+                            }
                           </div>
-
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2">
                               <div>
-                                <p style={{ fontSize: 13, fontWeight: 700, color: colors.text, margin: 0 }}>{cert.title}</p>
-                                {cert.issuer && <p style={{ fontSize: 12, color: colors.primary, fontWeight: 600, margin: "2px 0" }}>{cert.issuer}</p>}
+                                <p className="text-sm font-bold text-slate-900">{cert.title}</p>
+                                {cert.issuer && <p className="text-xs font-semibold text-blue-600 mt-0.5">{cert.issuer}</p>}
                                 {cert.obtained_at && (
-                                  <p style={{ fontSize: 11, color: colors.textLight, margin: 0 }}>
+                                  <p className="text-xs text-slate-400 mt-0.5">
                                     {cert.obtained_at?.slice(0, 10)}
                                     {cert.expires_at && ` → ${cert.expires_at?.slice(0, 10)}`}
                                   </p>
                                 )}
-                                <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                                <div className="flex gap-3 mt-1">
                                   {cert.credential_url && (
-                                    <a href={cert.credential_url} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: colors.accent, textDecoration: "none", display: "flex", alignItems: "center", gap: 3 }}>
+                                    <a href={cert.credential_url} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline flex items-center gap-1">
                                       <Link size={10} /> View credential
                                     </a>
                                   )}
                                   {fileUrl && (
-                                    <a href={fileUrl} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: colors.success, textDecoration: "none", display: "flex", alignItems: "center", gap: 3 }}>
+                                    <a href={fileUrl} target="_blank" rel="noreferrer" className="text-xs text-emerald-600 hover:underline flex items-center gap-1">
                                       <ChevronRight size={10} /> View file
                                     </a>
                                   )}
                                 </div>
                               </div>
-                              <div style={{ display: "flex", gap: 4 }}>
-                                <button onClick={() => openEditCert(cert)} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4 }}>
-                                  <Pencil size={13} />
-                                </button>
-                                <button onClick={() => dispatch(deleteCertificationThunk(cert.id))} style={{ background: "none", border: "none", cursor: "pointer", color: colors.textLight, padding: 4 }}>
-                                  <Trash2 size={13} />
-                                </button>
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                                <button onClick={() => openEditCert(cert)} className="text-slate-400 hover:text-blue-600 p-1"><Pencil size={13} /></button>
+                                <button onClick={() => dispatch(deleteCertificationThunk(cert.id))} className="text-slate-400 hover:text-red-500 p-1"><Trash2 size={13} /></button>
                               </div>
                             </div>
                           </div>
@@ -569,42 +399,34 @@ export default function ProfilePage() {
                 </div>
             }
           </Card>
-
         </div>
       </div>
 
       {/* ── Skill Modal ── */}
       {skillOpen && (
         <Modal title="Manage Skills" onClose={() => setSkillOpen(false)}>
-          <div style={{ background: "#EFF6FF", border: "1.5px dashed #93C5FD", borderRadius: 10, padding: 14, marginBottom: 16 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, color: colors.primary, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              <Code2 size={11} style={{ display: "inline", marginRight: 4 }} />
-              Create New Skill
-            </p>
-            <div style={{ display: "flex", gap: 8 }}>
+          <div className="bg-blue-50 border border-dashed border-blue-200 rounded-xl p-3 mb-4">
+            <p className="text-xs font-semibold text-blue-700 mb-2 uppercase tracking-wide">Create New Skill</p>
+            <div className="flex gap-2">
               <input placeholder="Skill name" value={newSkillName} onChange={(e) => setNewSkillName(e.target.value)}
-                style={{ flex: 1, padding: "8px 10px", fontSize: 12, border: `1.5px solid ${colors.border}`, borderRadius: 8, outline: "none" }} />
+                className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300" />
               <input placeholder="Category" value={newSkillCategory} onChange={(e) => setNewSkillCategory(e.target.value)}
-                style={{ flex: 1, padding: "8px 10px", fontSize: 12, border: `1.5px solid ${colors.border}`, borderRadius: 8, outline: "none" }} />
+                className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300" />
               <button onClick={handleCreateSkill} disabled={!newSkillName || !newSkillCategory}
-                style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, background: colors.primary, color: "white", border: "none", borderRadius: 8, cursor: "pointer" }}>
+                className="px-3 py-1.5 text-xs font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
                 Add
               </button>
             </div>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, maxHeight: 200, overflowY: "auto" }}>
+          <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto">
             {allSkills.map((skill) => {
               const has = mySkillIds.includes(skill.id);
               return (
                 <button key={skill.id}
                   onClick={() => has ? dispatch(removeSkillThunk(skill.id)) : dispatch(addSkillThunk(skill.id))}
-                  style={{
-                    padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: "pointer",
-                    background: has ? colors.primary : "white",
-                    color: has ? "white" : colors.textMid,
-                    border: `1.5px solid ${has ? colors.primary : colors.border}`,
-                    display: "flex", alignItems: "center", gap: 5, transition: "all 0.15s"
-                  }}>
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1 ${
+                    has ? "bg-blue-600 text-white border-blue-600" : "border-slate-200 text-slate-600 hover:border-blue-400"
+                  }`}>
                   {has && <Check size={10} />}
                   {skill.name}
                 </button>
@@ -617,18 +439,18 @@ export default function ProfilePage() {
       {/* ── Experience Modal ── */}
       {expModal && (
         <Modal title={expModal === "add" ? "Add Experience" : "Edit Experience"} onClose={() => setExpModal(null)}>
-          <Input label="Job Title *" value={expForm.job_title} onChange={(e) => setExpForm({ ...expForm, job_title: e.target.value })} />
-          <Input label="Company *" value={expForm.company_name} onChange={(e) => setExpForm({ ...expForm, company_name: e.target.value })} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            <Input label="Start Date *" type="date" value={expForm.start_date?.slice(0, 10)} onChange={(e) => setExpForm({ ...expForm, start_date: e.target.value })} />
-            <Input label="End Date *" type="date" value={expForm.end_date?.slice(0, 10)} onChange={(e) => setExpForm({ ...expForm, end_date: e.target.value })} />
+          <Field label="Job Title *" value={expForm.job_title} onChange={(e) => setExpForm({ ...expForm, job_title: e.target.value })} />
+          <Field label="Company *" value={expForm.company_name} onChange={(e) => setExpForm({ ...expForm, company_name: e.target.value })} />
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Start Date *" type="date" value={expForm.start_date?.slice(0, 10)} onChange={(e) => setExpForm({ ...expForm, start_date: e.target.value })} />
+            <Field label="End Date *" type="date" value={expForm.end_date?.slice(0, 10)} onChange={(e) => setExpForm({ ...expForm, end_date: e.target.value })} />
           </div>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 11, fontWeight: 600, color: colors.textMid, display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Description *</label>
+          <div className="mb-4">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1">Description *</label>
             <textarea rows={3} value={expForm.description} onChange={(e) => setExpForm({ ...expForm, description: e.target.value })}
-              style={{ width: "100%", padding: "9px 12px", fontSize: 13, border: `1.5px solid ${colors.border}`, borderRadius: 9, outline: "none", resize: "none", boxSizing: "border-box" }} />
+              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none" />
           </div>
-          <button onClick={handleSaveExp} style={{ width: "100%", padding: "10px", background: colors.primary, color: "white", border: "none", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={handleSaveExp} className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
             {expModal === "add" ? "Add Experience" : "Save Changes"}
           </button>
         </Modal>
@@ -637,20 +459,20 @@ export default function ProfilePage() {
       {/* ── Education Modal ── */}
       {eduModal && (
         <Modal title={eduModal === "add" ? "Add Education" : "Edit Education"} onClose={() => setEduModal(null)}>
-          <Input label="Title *" value={eduForm.title} onChange={(e) => setEduForm({ ...eduForm, title: e.target.value })} />
-          <Input label="University *" value={eduForm.university} onChange={(e) => setEduForm({ ...eduForm, university: e.target.value })} />
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 11, fontWeight: 600, color: colors.textMid, display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Degree *</label>
+          <Field label="Title *" value={eduForm.title} onChange={(e) => setEduForm({ ...eduForm, title: e.target.value })} />
+          <Field label="University *" value={eduForm.university} onChange={(e) => setEduForm({ ...eduForm, university: e.target.value })} />
+          <div className="mb-3">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1">Degree *</label>
             <select value={eduForm.degree} onChange={(e) => setEduForm({ ...eduForm, degree: e.target.value })}
-              style={{ width: "100%", padding: "9px 12px", fontSize: 13, border: `1.5px solid ${colors.border}`, borderRadius: 9, outline: "none" }}>
+              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
               {DEGREES.map((d) => <option key={d}>{d}</option>)}
             </select>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            <Input label="Start Date *" type="date" value={eduForm.start_date?.slice(0, 10)} onChange={(e) => setEduForm({ ...eduForm, start_date: e.target.value })} />
-            <Input label="End Date *" type="date" value={eduForm.end_date?.slice(0, 10)} onChange={(e) => setEduForm({ ...eduForm, end_date: e.target.value })} />
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Start Date *" type="date" value={eduForm.start_date?.slice(0, 10)} onChange={(e) => setEduForm({ ...eduForm, start_date: e.target.value })} />
+            <Field label="End Date *" type="date" value={eduForm.end_date?.slice(0, 10)} onChange={(e) => setEduForm({ ...eduForm, end_date: e.target.value })} />
           </div>
-          <button onClick={handleSaveEdu} style={{ width: "100%", padding: "10px", background: colors.primary, color: "white", border: "none", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={handleSaveEdu} className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
             {eduModal === "add" ? "Add Education" : "Save Changes"}
           </button>
         </Modal>
@@ -659,22 +481,22 @@ export default function ProfilePage() {
       {/* ── Certification Modal ── */}
       {certModal && (
         <Modal title={certModal === "add" ? "Add Certification" : "Edit Certification"} onClose={() => setCertModal(null)}>
-          <Input label="Title *" value={certForm.title} onChange={(e) => setCertForm({ ...certForm, title: e.target.value })} />
-          <Input label="Issuer" value={certForm.issuer} onChange={(e) => setCertForm({ ...certForm, issuer: e.target.value })} />
-          <Input label="Credential ID" value={certForm.credential_id} onChange={(e) => setCertForm({ ...certForm, credential_id: e.target.value })} />
-          <Input label="Credential URL" value={certForm.credential_url} onChange={(e) => setCertForm({ ...certForm, credential_url: e.target.value })} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            <Input label="Obtained At *" type="date" value={certForm.obtained_at?.slice(0, 10)} onChange={(e) => setCertForm({ ...certForm, obtained_at: e.target.value })} />
-            <Input label="Expires At" type="date" value={certForm.expires_at?.slice(0, 10)} onChange={(e) => setCertForm({ ...certForm, expires_at: e.target.value })} />
+          <Field label="Title *" value={certForm.title} onChange={(e) => setCertForm({ ...certForm, title: e.target.value })} />
+          <Field label="Issuer" value={certForm.issuer} onChange={(e) => setCertForm({ ...certForm, issuer: e.target.value })} />
+          <Field label="Credential ID" value={certForm.credential_id} onChange={(e) => setCertForm({ ...certForm, credential_id: e.target.value })} />
+          <Field label="Credential URL" value={certForm.credential_url} onChange={(e) => setCertForm({ ...certForm, credential_url: e.target.value })} />
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Obtained At *" type="date" value={certForm.obtained_at?.slice(0, 10)} onChange={(e) => setCertForm({ ...certForm, obtained_at: e.target.value })} />
+            <Field label="Expires At" type="date" value={certForm.expires_at?.slice(0, 10)} onChange={(e) => setCertForm({ ...certForm, expires_at: e.target.value })} />
           </div>
           {certModal === "add" && (
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 11, fontWeight: 600, color: colors.textMid, display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Certificate File</label>
+            <div className="mb-4">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1">Certificate File</label>
               <input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={(e) => setCertFile(e.target.files[0])}
-                style={{ width: "100%", fontSize: 12, padding: "8px", border: `1.5px solid ${colors.border}`, borderRadius: 9 }} />
+                className="w-full text-xs text-slate-600 border border-slate-200 rounded-xl px-3 py-2 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700" />
             </div>
           )}
-          <button onClick={handleSaveCert} style={{ width: "100%", padding: "10px", background: colors.primary, color: "white", border: "none", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={handleSaveCert} className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
             {certModal === "add" ? "Add Certification" : "Save Changes"}
           </button>
         </Modal>
@@ -683,21 +505,20 @@ export default function ProfilePage() {
       {/* ── Language Modal ── */}
       {langModal && (
         <Modal title="Add Language" onClose={() => setLangModal(null)}>
-          <Input label="Language * (min 5 chars)" value={langForm.language} onChange={(e) => setLangForm({ ...langForm, language: e.target.value })} />
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 11, fontWeight: 600, color: colors.textMid, display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Level</label>
+          <Field label="Language * (min 5 chars)" value={langForm.language} onChange={(e) => setLangForm({ ...langForm, language: e.target.value })} />
+          <div className="mb-4">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-1">Level</label>
             <select value={langForm.level} onChange={(e) => setLangForm({ ...langForm, level: e.target.value })}
-              style={{ width: "100%", padding: "9px 12px", fontSize: 13, border: `1.5px solid ${colors.border}`, borderRadius: 9, outline: "none" }}>
+              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
               {LEVELS.map((l) => <option key={l}>{l}</option>)}
             </select>
           </div>
-          <button onClick={handleSaveLang} style={{ width: "100%", padding: "10px", background: colors.primary, color: "white", border: "none", borderRadius: 9, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={handleSaveLang} className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
             Add Language
           </button>
         </Modal>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
