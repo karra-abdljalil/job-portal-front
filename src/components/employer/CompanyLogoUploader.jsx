@@ -41,7 +41,7 @@ export default function CompanyLogoUploader() {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      setError("Veuillez choisir un fichier image.");
+      setError("Please choose an image file.");
       return;
     }
 
@@ -51,7 +51,7 @@ export default function CompanyLogoUploader() {
       setSuccess("");
 
       await uploadCompanyLogo(selectedFile);
-      setSuccess("Logo mis à jour avec succès.");
+      setSuccess("Logo updated successfully.");
 
       const blob = await getCompanyLogo();
       const objectUrl = URL.createObjectURL(blob);
@@ -59,61 +59,71 @@ export default function CompanyLogoUploader() {
       setSelectedFile(null);
     } catch (err) {
       console.error(err);
-      setError("Impossible de téléverser le logo.");
+      setError("Unable to upload the logo.");
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div className="rounded-xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-900">Logo entreprise</h2>
-      <p className="mt-1 text-sm text-gray-600">
-        Ajoutez ou remplacez le logo de votre entreprise.
-      </p>
+    <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mb-5">
+        <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+          Brand Identity
+        </div>
 
-      <div className="mt-5 flex flex-col gap-4 md:flex-row md:items-center">
-        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-[#f8fafc]">
+        <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
+          Company Logo
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">
+          Add or replace your company logo to strengthen your employer brand.
+        </p>
+      </div>
+
+      <div className="mt-5 flex flex-col gap-5 md:flex-row md:items-center">
+        <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm">
           {loadingLogo ? (
-            <span className="text-xs text-gray-500">Chargement...</span>
+            <span className="px-2 text-center text-xs text-slate-500">
+              Loading...
+            </span>
           ) : logoUrl ? (
             <img
               src={logoUrl}
-              alt="Logo entreprise"
-              className="h-full w-full object-cover"
+              alt="Company logo"
+              className="h-full w-full object-contain p-3"
             />
           ) : (
-            <span className="text-xs text-gray-500 text-center px-2">
-              Aucun logo
+            <span className="px-3 text-center text-xs text-slate-500">
+              No logo
             </span>
           )}
         </div>
 
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 space-y-4">
           <input
             type="file"
             accept="image/png,image/jpeg,image/jpg"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#e8f3ff] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0a66c2] hover:file:bg-[#dbeafe]"
+            className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 file:bg-[#e8f3ff] file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-[#0a66c2] hover:file:bg-[#dbeafe]"
           />
 
           <button
             type="button"
             onClick={handleUpload}
             disabled={uploading}
-            className="rounded-full bg-[#0a66c2] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#004182] disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004182] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {uploading ? "Téléversement..." : "Mettre à jour le logo"}
+            {uploading ? "Uploading..." : "Update Logo"}
           </button>
 
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
               {success}
             </div>
           )}

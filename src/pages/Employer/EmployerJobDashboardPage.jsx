@@ -10,18 +10,20 @@ import { getCompanyLogo } from "../../services/companyLogo.service";
 
 function InfoCard({ label, value }) {
   return (
-    <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="mt-2 text-2xl font-bold text-gray-900">{value}</p>
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+      <p className="text-sm font-medium text-slate-500">{label}</p>
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+        {value}
+      </p>
     </div>
   );
 }
 
 function EmptyBlock({ title, text }) {
   return (
-    <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 text-center shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-      <p className="mt-2 text-sm text-gray-600">{text}</p>
+    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center">
+      <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
     </div>
   );
 }
@@ -61,7 +63,7 @@ export default function EmployerJobDashboardPage() {
           logoObjectUrl = URL.createObjectURL(logoBlob);
           setCompanyLogoUrl(logoObjectUrl);
         } catch (logoErr) {
-          console.error("Logo non chargé :", logoErr);
+          console.error("Logo not loaded:", logoErr);
           setCompanyLogoUrl("");
         }
       } catch (err) {
@@ -91,119 +93,143 @@ export default function EmployerJobDashboardPage() {
       setJob(res?.data || job);
     } catch (err) {
       console.error("Update status error:", err);
-      alert("Erreur lors de la mise à jour");
+      alert("Error while updating the status");
     } finally {
       setStatusLoading(false);
     }
   };
 
   if (loading) {
-    return <p className="p-6">Chargement...</p>;
+    return (
+      <div className="min-h-full bg-[#f4f2ee] px-4 py-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-slate-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!job) {
-    return <p className="p-6">Erreur chargement</p>;
+    return (
+      <div className="min-h-full bg-[#f4f2ee] px-4 py-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="rounded-3xl border border-red-200 bg-white p-6 shadow-sm">
+            <p className="text-red-600">Loading error</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-full bg-[#f3f2ef]">
+    <div className="min-h-full bg-[#f4f2ee] px-4 py-6">
       <div className="mx-auto max-w-7xl space-y-5">
         {/* HEADER */}
-        <div className="overflow-hidden rounded-2xl border bg-white shadow-sm">
-          <div className="h-24 bg-gradient-to-r from-[#0a66c2] to-[#70b5f9]" />
+        <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+          <div className="h-32 bg-gradient-to-r from-[#0a66c2] via-[#378fe9] to-[#70b5f9]" />
 
-          <div className="p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="px-6 pb-6">
+            <div className="-mt-10 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div className="flex items-start gap-4">
-                <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-[#e0dfdc] bg-white shadow-sm">
+                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border-4 border-white bg-white shadow-lg">
                   {companyLogoUrl ? (
                     <img
                       src={companyLogoUrl}
-                      alt="Logo entreprise"
+                      alt="Company logo"
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-[#0a66c2] text-lg font-bold text-white">
+                    <div className="flex h-full w-full items-center justify-center bg-[#0a66c2] text-xl font-bold text-white">
                       {job.company_name?.charAt(0) || "C"}
                     </div>
                   )}
                 </div>
 
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
+                <div className="pt-1">
+                  <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+                    Job Dashboard
+                  </div>
+
+                  <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
                     {job.job_title}
                   </h1>
 
-                  <p className="mt-1 text-sm font-medium text-gray-600">
-                    {job.company_name || "Entreprise"}
+                  <p className="mt-1 text-sm font-medium text-slate-700">
+                    {job.company_name || "Company"}
                   </p>
 
-                  <div className="mt-2 flex flex-wrap gap-2 text-sm text-gray-600">
-                    <span>{job.location}</span>
-                    <span>•</span>
-                    <span>{job.employment_type}</span>
-                    <span>•</span>
-                    <span>{job.experience_level}</span>
+                  <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-600">
+                    <span className="rounded-full bg-slate-100 px-3 py-1">
+                      {job.location || "Location not specified"}
+                    </span>
+                    <span className="rounded-full bg-slate-100 px-3 py-1">
+                      {job.employment_type || "Type not specified"}
+                    </span>
+                    <span className="rounded-full bg-slate-100 px-3 py-1">
+                      {job.experience_level || "Experience not specified"}
+                    </span>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold ${
                         job.is_active
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-600"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-slate-100 text-slate-600"
                       }`}
                     >
                       {job.is_active ? "Active" : "Inactive"}
                     </span>
 
-                    <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-semibold text-gray-700">
-                      {applicants.length} candidatures
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                      {applicants.length} applications
                     </span>
 
-                    <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-semibold text-gray-700">
-                      {shortlisted.length} shortlist
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                      {shortlisted.length} shortlisted
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 pt-1">
                 <Link
                   to="/employer/jobs"
-                  className="rounded-xl border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                  className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
-                  Retour
+                  Back
                 </Link>
 
                 <Link
                   to={`/employer/jobs/${job.id}/applicants`}
-                  className="rounded-xl bg-[#0a66c2] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#004182]"
+                  className="rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
                 >
-                  Voir candidats
+                  View Candidates
                 </Link>
 
                 <Link
                   to={`/employer/jobs/${job.id}/edit`}
-                  className="rounded-xl border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                  className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                 >
-                  Modifier
+                  Edit
                 </Link>
 
                 <button
                   onClick={handleToggleStatus}
                   disabled={statusLoading}
-                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                  className={`rounded-full px-5 py-3 text-sm font-semibold transition ${
                     job.is_active
-                      ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
-                      : "bg-green-100 text-green-700 hover:bg-green-200"
+                      ? "bg-orange-50 text-orange-700 hover:bg-orange-100"
+                      : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                   } ${statusLoading ? "cursor-not-allowed opacity-60" : ""}`}
                 >
                   {statusLoading
-                    ? "..."
+                    ? "Updating..."
                     : job.is_active
-                    ? "Désactiver"
-                    : "Activer"}
+                    ? "Deactivate"
+                    : "Activate"}
                 </button>
               </div>
             </div>
@@ -212,96 +238,184 @@ export default function EmployerJobDashboardPage() {
 
         {/* STATS */}
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <InfoCard label="Candidatures" value={applicants.length} />
+          <InfoCard label="Applications" value={applicants.length} />
           <InfoCard label="Shortlist" value={shortlisted.length} />
           <InfoCard
-            label="Taux shortlist"
+            label="Shortlist Rate"
             value={
               applicants.length
                 ? Math.round((shortlisted.length / applicants.length) * 100) + "%"
                 : "0%"
             }
           />
-          <InfoCard label="Salaire" value={job.salary_range || "—"} />
+          <InfoCard label="Salary" value={job.salary_range || "—"} />
         </div>
 
-        {/* DESCRIPTION */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Description</h2>
-          <p className="mt-3 text-sm text-gray-700">
-            {job.job_description || "Aucune description"}
-          </p>
-
-          {job.skills?.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {job.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* CANDIDATS */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Candidats récents</h2>
-
-          {recentApplicants.length === 0 ? (
-            <div className="mt-4">
-              <EmptyBlock
-                title="Aucune candidature"
-                text="Les candidats apparaîtront ici"
-              />
-            </div>
-          ) : (
-            <div className="mt-4 space-y-3">
-              {recentApplicants.map((app) => (
-                <div
-                  key={app.application_id}
-                  className="flex justify-between rounded-xl border p-4"
-                >
-                  <div>
-                    <p className="font-semibold">{app.full_name}</p>
-                    <p className="text-sm text-gray-600">{app.email}</p>
-                  </div>
-
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs">
-                    {app.status}
-                  </span>
+        <div className="grid gap-5 xl:grid-cols-[1.7fr_1fr]">
+          <div className="space-y-5">
+            {/* DESCRIPTION */}
+            <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Job Description
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Overview of the role, requirements, and expected skills
+                  </p>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              </div>
 
-        {/* SHORTLIST */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Shortlist</h2>
+              <p className="mt-4 text-sm leading-7 text-slate-700">
+                {job.job_description || "No description available"}
+              </p>
 
-          {shortlisted.length === 0 ? (
-            <div className="mt-4">
-              <EmptyBlock
-                title="Aucun shortlist"
-                text="Ajoutez des candidats"
-              />
-            </div>
-          ) : (
-            <div className="mt-4 space-y-3">
-              {shortlisted.slice(0, 5).map((app) => (
-                <div
-                  key={app.application_id}
-                  className="rounded-xl border p-4"
-                >
-                  <p className="font-semibold">{app.full_name}</p>
-                  <p className="text-sm text-gray-600">{app.email}</p>
+              {job.skills?.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {job.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full bg-[#eef3f8] px-3 py-1.5 text-xs font-medium text-slate-700"
+                    >
+                      {skill}
+                    </span>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
+
+            {/* RECENT APPLICANTS */}
+            <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Recent Candidates
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Latest applicants for this job post
+                  </p>
+                </div>
+              </div>
+
+              {recentApplicants.length === 0 ? (
+                <div className="mt-5">
+                  <EmptyBlock
+                    title="No applications yet"
+                    text="Candidates will appear here once applications are received."
+                  />
+                </div>
+              ) : (
+                <div className="mt-5 space-y-3">
+                  {recentApplicants.map((app) => (
+                    <div
+                      key={app.application_id}
+                      className="flex flex-col gap-3 rounded-2xl border border-slate-200 p-4 transition hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+                    >
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {app.full_name}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-600">{app.email}</p>
+                      </div>
+
+                      <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                        {app.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <aside className="space-y-5">
+            {/* SHORTLIST */}
+            <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">
+                Shortlist
+              </h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Top candidates selected for this role
+              </p>
+
+              {shortlisted.length === 0 ? (
+                <div className="mt-5">
+                  <EmptyBlock
+                    title="No shortlisted candidates"
+                    text="Add candidates to your shortlist to see them here."
+                  />
+                </div>
+              ) : (
+                <div className="mt-5 space-y-3">
+                  {shortlisted.slice(0, 5).map((app) => (
+                    <div
+                      key={app.application_id}
+                      className="rounded-2xl border border-slate-200 p-4 transition hover:bg-slate-50"
+                    >
+                      <p className="font-semibold text-slate-900">
+                        {app.full_name}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-600">{app.email}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* JOB SUMMARY */}
+            <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                Job Summary
+              </h2>
+
+              <div className="mt-5 space-y-4">
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
+                    Company
+                  </p>
+                  <p className="mt-1 font-medium text-slate-900">
+                    {job.company_name || "Not provided"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
+                    Status
+                  </p>
+                  <p className="mt-1 font-medium text-slate-900">
+                    {job.is_active ? "Active" : "Inactive"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
+                    Employment Type
+                  </p>
+                  <p className="mt-1 font-medium text-slate-900">
+                    {job.employment_type || "Not provided"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
+                    Experience Level
+                  </p>
+                  <p className="mt-1 font-medium text-slate-900">
+                    {job.experience_level || "Not provided"}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
+                    Salary Range
+                  </p>
+                  <p className="mt-1 font-medium text-slate-900">
+                    {job.salary_range || "—"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

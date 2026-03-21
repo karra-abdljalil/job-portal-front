@@ -40,11 +40,14 @@ apiClient.interceptors.response.use(
     PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1);
     const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/login")
-    ) {
+   if (
+  error.response?.status === 401 &&
+  !originalRequest._retry &&
+  !originalRequest.url.includes("/auth/login") &&
+  !originalRequest.url.includes("/auth/register") &&
+  !originalRequest.url.includes("/auth/me") &&
+  !originalRequest.url.includes("/auth/refresh")
+) {
       originalRequest._retry = true;
 
       try {

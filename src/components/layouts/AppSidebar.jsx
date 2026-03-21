@@ -1,4 +1,4 @@
-import { 
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -30,16 +30,28 @@ export function AppSidebar({ items }) {
   };
 
   return (
-    <Sidebar className="border-r border-[#e0dfdc] bg-white">
-      <SidebarContent>
-        <div className="border-b border-[#e0dfdc] px-4 py-5">
-          <h2 className="text-xl font-bold text-[#0a66c2]">JobPortal</h2>
-          <p className="mt-1 text-xs text-gray-500">Employer Workspace</p>
+    <Sidebar className="border-r border-slate-200 bg-white">
+      <SidebarContent className="bg-white">
+        <div className="border-b border-slate-200 px-4 py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0a66c2] text-lg font-bold text-white shadow-sm">
+              JP
+            </div>
+
+            <div>
+              <h2 className="text-lg font-bold tracking-tight text-slate-900">
+                JobPortal
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Employer Workspace
+              </p>
+            </div>
+          </div>
         </div>
 
-        <SidebarGroup className="px-2 py-4">
+        <SidebarGroup className="px-3 py-4">
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-2">
               {items.map((item) => {
                 const active = isItemActive(item);
 
@@ -48,13 +60,23 @@ export function AppSidebar({ items }) {
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}
-                        className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                        className={`group flex items-center rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 ${
                           active
                             ? "bg-[#e8f3ff] text-[#0a66c2] shadow-sm"
-                            : "text-gray-700 hover:bg-gray-50"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                         }`}
                       >
-                        {item.icon && <item.icon className="mr-3 h-4 w-4" />}
+                        {item.icon && (
+                          <div
+                            className={`mr-3 flex h-9 w-9 items-center justify-center rounded-xl transition ${
+                              active
+                                ? "bg-white text-[#0a66c2] shadow-sm"
+                                : "bg-slate-100 text-slate-500 group-hover:bg-white"
+                            }`}
+                          >
+                            <item.icon className="h-4 w-4" />
+                          </div>
+                        )}
                         <span>{item.title}</span>
                       </NavLink>
                     </SidebarMenuButton>
@@ -62,17 +84,19 @@ export function AppSidebar({ items }) {
                 );
               })}
 
-              {/* ✅ Logout */}
+              <div className="my-3 border-t border-slate-200" />
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   onClick={logout}
-                  className="flex items-center rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
+                  className="flex w-full items-center rounded-2xl px-3 py-3 text-sm font-medium text-red-600 transition hover:bg-red-50"
                 >
-                  <LogOut className="mr-3 h-4 w-4" />
+                  <div className="mr-3 flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                    <LogOut className="h-4 w-4" />
+                  </div>
                   Logout
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

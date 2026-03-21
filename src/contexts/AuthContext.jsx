@@ -16,18 +16,20 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     navigate("/");
   };
-  const checkIfAuthenticated = async () => {
-    try {
-      const res = await apiClient.get("/api/auth/me");
-      setIsAuthenticated(true);
-      setUser(res.data?.user);
-    } catch (error) {
-      setIsAuthenticated(false);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const checkIfAuthenticated = async () => {
+  try {
+    const res = await apiClient.get("/api/auth/me");
+    setIsAuthenticated(true);
+    setUser(res.data?.user);
+    return res.data?.user;
+  } catch (error) {
+    setIsAuthenticated(false);
+    setUser(null);
+    return null;
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     checkIfAuthenticated();

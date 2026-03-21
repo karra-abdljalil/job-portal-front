@@ -52,7 +52,7 @@ export default function CompanyProfilePage() {
         console.error("Company profile load error:", err);
         setError(
           err?.response?.data?.message ||
-            "Impossible de charger le profil entreprise."
+            "Unable to load the company profile."
         );
       } finally {
         setLoading(false);
@@ -68,11 +68,11 @@ export default function CompanyProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f3f2ef] py-8">
+      <div className="min-h-screen bg-[#f4f2ee] py-8">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <p className="text-lg text-gray-600">
-              Chargement du profil entreprise...
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-lg font-medium text-slate-600">
+              Loading company profile...
             </p>
           </div>
         </div>
@@ -82,10 +82,10 @@ export default function CompanyProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f3f2ef] py-8">
+      <div className="min-h-screen bg-[#f4f2ee] py-8">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-            <p className="text-red-600">{error}</p>
+          <div className="rounded-[28px] border border-red-200 bg-white p-6 shadow-sm">
+            <p className="font-medium text-red-600">{error}</p>
           </div>
         </div>
       </div>
@@ -94,29 +94,35 @@ export default function CompanyProfilePage() {
 
   if (!company) {
     return (
-      <div className="min-h-screen bg-[#f3f2ef] py-8">
+      <div className="min-h-screen bg-[#f4f2ee] py-8">
         <div className="mx-auto max-w-5xl px-4">
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-8 shadow-sm">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Aucun profil entreprise
+          <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+              Company Profile
+            </div>
+
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+              No company profile found
             </h1>
-            <p className="mt-3 text-sm leading-6 text-gray-600">
-              Vous devez d’abord créer votre profil entreprise avant de pouvoir le consulter.
+
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+              You need to create your company profile first before you can view
+              and manage it.
             </p>
 
-            <div className="mt-6 flex gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/employer/company/profile/edit"
-                className="rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white hover:bg-[#004182]"
+                className="rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
               >
-                Créer le profil entreprise
+                Create Company Profile
               </Link>
 
               <Link
                 to="/employer/dashboard"
-                className="rounded-full border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-white"
+                className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
               >
-                Retour au dashboard
+                Back to Dashboard
               </Link>
             </div>
           </div>
@@ -133,31 +139,43 @@ export default function CompanyProfilePage() {
 
       case "Posts":
         return (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-gray-900">Posts</h2>
-            <p className="mt-3 text-gray-600">
-              Aucune publication pour le moment.
-            </p>
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                Posts
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                No posts available at the moment.
+              </p>
+            </div>
           </div>
         );
 
       case "Emplois":
         return (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-gray-900">Emplois</h2>
-            <p className="mt-3 text-gray-600">
-              Les offres de l’entreprise seront affichées ici bientôt.
-            </p>
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                Jobs
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Company job opportunities will be displayed here soon.
+              </p>
+            </div>
           </div>
         );
 
       case "Personnes":
         return (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-gray-900">Personnes</h2>
-            <p className="mt-3 text-gray-600">
-              Les membres de l’entreprise seront affichés ici bientôt.
-            </p>
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                People
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Company members will be displayed here soon.
+              </p>
+            </div>
           </div>
         );
 
@@ -167,15 +185,19 @@ export default function CompanyProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f2ef] py-8">
+    <div className="min-h-screen bg-[#f4f2ee] py-8">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="grid gap-4 xl:grid-cols-[2.2fr_1fr]">
-          <div className="space-y-4">
+        <div className="grid gap-5 xl:grid-cols-[2.2fr_1fr]">
+          <div className="space-y-5">
             <CompanyLinkedInHero company={company} />
-            <CompanyLinkedInTabs
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-            />
+
+            <div className="rounded-[28px] border border-slate-200 bg-white shadow-sm">
+              <CompanyLinkedInTabs
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+              />
+            </div>
+
             {renderTabContent()}
           </div>
 

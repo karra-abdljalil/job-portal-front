@@ -1,9 +1,12 @@
 import { Outlet, useLocation, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { roleNavigateTo } from "@/constants/roleNavigateto";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { Search, Bell, BriefcaseBusiness } from "lucide-react";
+import { getCompanyLogo } from "@/services/companyLogo.service";
+import { getMyCompany } from "@/services/company.service";
 
 const pageTitles = {
   "/employer/dashboard": "Employer Dashboard",
@@ -17,13 +20,18 @@ export const Dashboard = () => {
   const { user } = useAuth();
   const location = useLocation();
 
+  const [company, setCompany] = useState(null);
+  const [companyLogoUrl, setCompanyLogoUrl] = useState("");
+
   const navigateto = roleNavigateTo[user?.role] || [];
 
   const currentTitle =
     pageTitles[location.pathname] ||
-    (location.pathname.startsWith("/employer/jobs/") ? "Job Details" : "Dashboard");
+    (location.pathname.startsWith("/employer/jobs/")
+      ? "Job Details"
+      : "Dashboard");
 
-  const initials =
+  const userInitials =
     user?.full_name
       ?.split(" ")
       .map((word) => word[0])
@@ -31,19 +39,66 @@ export const Dashboard = () => {
       .slice(0, 2)
       .toUpperCase() || "U";
 
+  useEffect(() => {
+    let objectUrl = null;
+
+    const loadEmployerHeaderData = async () => {
+      if (user?.role !== "employer") {
+        setCompany(null);
+        setCompanyLogoUrl("");
+        return;
+      }
+
+      try {
+        const companyRes = await getMyCompany();
+        const companyData = companyRes?.company || companyRes?.data?.company || null;
+        setCompany(companyData);
+
+        if (companyData?.id) {
+          try {
+            const blob = await getCompanyLogo();
+            objectUrl = URL.createObjectURL(blob);
+            setCompanyLogoUrl(objectUrl);
+          } catch (logoErr) {
+            console.warn("Impossible de charger le logo entreprise :", logoErr);
+            setCompanyLogoUrl("");
+          }
+        } else {
+          setCompanyLogoUrl("");
+        }
+      } catch (err) {
+        console.error("Erreur chargement company header:", err);
+        setCompany(null);
+        setCompanyLogoUrl("");
+      }
+    };
+
+    loadEmployerHeaderData();
+
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [user?.role]);
+
+  const companyInitial =
+    company?.company_name?.trim()?.charAt(0)?.toUpperCase() || "C";
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#f3f2ef]">
         <AppSidebar items={navigateto} />
 
         <main className="flex-1 overflow-auto">
-          {/* Topbar */}
           <header className="sticky top-0 z-20 border-b border-[#e0dfdc] bg-white/95 backdrop-blur">
             <div className="flex h-16 items-center justify-between gap-4 px-4 md:px-6">
               <div className="flex items-center gap-3">
                 <SidebarTrigger />
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900">{currentTitle}</h1>
+                  <h1 className="text-lg font-bold text-gray-900">
+                    {currentTitle}
+                  </h1>
                   <p className="text-xs text-gray-500">
                     Welcome back{user?.full_name ? `, ${user.full_name}` : ""}
                   </p>
@@ -79,16 +134,27 @@ export const Dashboard = () => {
                   </Link>
                 )}
 
-                <div className="flex items-center gap-3 rounded-full border border-[#e0dfdc] bg-white px-2 py-1 shadow-sm">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0a66c2] text-sm font-bold text-white">
-                    {initials}
+                <div className="flex items-center gap-3 rounded-2xl border border-[#e0dfdc] bg-white px-3 py-2 shadow-sm">
+                  <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-[#e0dfdc] bg-white">
+                    {companyLogoUrl ? (
+                      <img
+                        src={companyLogoUrl}
+                        alt="Company logo"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-[#0a66c2] text-sm font-bold text-white">
+                        {companyInitial}
+                      </div>
+                    )}
                   </div>
-                  <div className="hidden pr-2 md:block">
+
+                  <div className="hidden min-w-[160px] md:block">
                     <p className="text-sm font-semibold text-gray-900">
-                      {user?.full_name || "User"}
+                      {company?.company_name || "Entreprise"}
                     </p>
-                    <p className="text-xs text-gray-500 capitalize">
-                      {user?.role || "member"}
+                    <p className="text-xs text-gray-500">
+                      {user?.full_name || "Employer"}
                     </p>
                   </div>
                 </div>
@@ -96,7 +162,6 @@ export const Dashboard = () => {
             </div>
           </header>
 
-          {/* Page content */}
           <div className="p-4 md:p-6">
             <Outlet />
           </div>

@@ -17,62 +17,62 @@ function JobCard({
   const isDeleteLoading = deleteLoadingId === job.id;
 
   return (
-    <div className="rounded-2xl border border-[#e0dfdc] bg-white p-5 shadow-sm transition hover:shadow-md">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-xl font-bold tracking-tight text-slate-900">
               {job.job_title}
             </h3>
 
             <span
               className={`rounded-full px-3 py-1 text-xs font-semibold ${
                 job.is_active
-                  ? "bg-green-50 text-green-700"
-                  : "bg-gray-100 text-gray-600"
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-slate-100 text-slate-600"
               }`}
             >
               {job.is_active ? "Active" : "Inactive"}
             </span>
           </div>
 
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-slate-600">
             {[job.location, job.employment_type, job.experience_level]
               .filter(Boolean)
-              .join(" • ") || "Informations non renseignées"}
+              .join(" • ") || "Information not provided"}
           </p>
 
           {job.salary_range ? (
-            <p className="mt-1 text-sm text-gray-700">
-              Salaire : <span className="font-medium">{job.salary_range}</span>
+            <p className="mt-2 text-sm text-slate-700">
+              Salary: <span className="font-medium">{job.salary_range}</span>
             </p>
           ) : null}
 
-          <p className="mt-2 text-xs text-gray-500">
-  Publiée le{" "}
-  {job.created_at
-    ? new Date(job.created_at).toLocaleDateString("fr-FR")
-    : "Date non disponible"}
-</p>
+          <p className="mt-2 text-xs text-slate-500">
+            Published on{" "}
+            {job.created_at
+              ? new Date(job.created_at).toLocaleDateString("en-GB")
+              : "Date not available"}
+          </p>
 
-<div className="mt-3 flex flex-wrap gap-2">
-  <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-gray-700">
-    {job.unique_views_count ?? 0} vue(s) unique(s)
-  </span>
-  <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-gray-700">
-    {job.applications_count ?? 0} candidature(s)
-  </span>
-  <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-gray-700">
-    {job.shortlisted_count ?? 0} shortlisté(s)
-  </span>
-</div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-slate-700">
+              {job.unique_views_count ?? 0} unique view(s)
+            </span>
+            <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-slate-700">
+              {job.applications_count ?? 0} application(s)
+            </span>
+            <span className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-slate-700">
+              {job.shortlisted_count ?? 0} shortlisted
+            </span>
+          </div>
 
           {job.skills?.length > 0 ? (
             <div className="mt-4 flex flex-wrap gap-2">
               {job.skills.slice(0, 6).map((skill) => (
                 <span
                   key={skill}
-                  className="rounded-full bg-[#eef3f8] px-3 py-1 text-xs font-medium text-gray-700"
+                  className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
                 >
                   {skill}
                 </span>
@@ -84,51 +84,51 @@ function JobCard({
         <div className="flex flex-wrap gap-2 lg:justify-end">
           <Link
             to={`/employer/jobs/${job.id}`}
-            className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+            className="rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
           >
-            Voir détails
+            View Details
           </Link>
 
           <Link
             to={`/employer/jobs/${job.id}/applicants`}
-            className="rounded-full border border-[#0a66c2] px-4 py-2 text-sm font-semibold text-[#0a66c2] transition hover:bg-[#e8f3ff]"
+            className="rounded-full border border-[#0a66c2] px-4 py-2.5 text-sm font-semibold text-[#0a66c2] transition hover:bg-[#e8f3ff]"
           >
-            Voir candidats
+            View Candidates
           </Link>
 
           <Link
             to={`/employer/jobs/${job.id}/edit`}
-            className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+            className="rounded-full border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
           >
-            Modifier
+            Edit
           </Link>
 
           <button
             type="button"
             onClick={() => onToggleStatus(job)}
             disabled={isStatusLoading}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+            className={`rounded-full px-4 py-2.5 text-sm font-semibold transition ${
               job.is_active
                 ? "border border-orange-300 text-orange-700 hover:bg-orange-50"
-                : "border border-green-300 text-green-700 hover:bg-green-50"
+                : "border border-emerald-300 text-emerald-700 hover:bg-emerald-50"
             } ${isStatusLoading ? "cursor-not-allowed opacity-60" : ""}`}
           >
             {isStatusLoading
-              ? "Chargement..."
+              ? "Loading..."
               : job.is_active
-              ? "Désactiver"
-              : "Activer"}
+              ? "Deactivate"
+              : "Activate"}
           </button>
 
           <button
             type="button"
             onClick={() => onDelete(job)}
             disabled={isDeleteLoading}
-            className={`rounded-full border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 ${
+            className={`rounded-full border border-red-300 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-50 ${
               isDeleteLoading ? "cursor-not-allowed opacity-60" : ""
             }`}
           >
-            {isDeleteLoading ? "Suppression..." : "Supprimer"}
+            {isDeleteLoading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
@@ -156,10 +156,10 @@ export default function MyJobsPage() {
       } catch (err) {
         console.error("Get employer jobs error:", err);
         setError(
-  err?.response?.data?.message ||
-    err?.message ||
-    "Impossible de charger les offres de l’entreprise."
-);
+          err?.response?.data?.message ||
+            err?.message ||
+            "Unable to load company job posts."
+        );
       } finally {
         setLoading(false);
       }
@@ -209,9 +209,9 @@ export default function MyJobsPage() {
     } catch (err) {
       console.error("Update job status error:", err);
       alert(
-  err?.response?.data?.message ||
-    "Impossible de mettre à jour le statut du job."
-);
+        err?.response?.data?.message ||
+          "Unable to update the job status."
+      );
     } finally {
       setStatusLoadingId(null);
     }
@@ -219,7 +219,7 @@ export default function MyJobsPage() {
 
   const handleDelete = async (job) => {
     const confirmed = window.confirm(
-      `Voulez-vous vraiment supprimer l’offre "${job.job_title}" ?`
+      `Do you really want to delete the job "${job.job_title}"?`
     );
 
     if (!confirmed) return;
@@ -233,85 +233,91 @@ export default function MyJobsPage() {
     } catch (err) {
       console.error("Delete job error:", err);
       alert(
-  err?.response?.data?.message ||
-    "Impossible de supprimer le job."
-);
+        err?.response?.data?.message ||
+          "Unable to delete the job."
+      );
     } finally {
       setDeleteLoadingId(null);
     }
   };
 
   return (
-    <div className="min-h-full bg-[#f3f2ef]">
-      <div className="mx-auto max-w-7xl space-y-4">
+    <div className="min-h-full bg-[#f4f2ee] py-6">
+      <div className="mx-auto max-w-7xl space-y-5 px-4">
         {/* Header */}
-        <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
+        <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Mes offres</h1>
-              <p className="mt-1 text-sm text-gray-600">
-                Gérez toutes les offres publiées par votre entreprise.
+              <div className="inline-flex rounded-full bg-[#e8f3ff] px-3 py-1 text-xs font-semibold text-[#0a66c2]">
+                Employer Jobs Space
+              </div>
+
+              <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+                My Job Posts
+              </h1>
+              <p className="mt-2 text-sm text-slate-600">
+                Manage all job posts published by your company.
               </p>
             </div>
 
             <Link
               to="/employer/jobs/create"
-              className="inline-flex rounded-full bg-[#0a66c2] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#004182]"
+              className="inline-flex rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#004182]"
             >
-              Créer une offre
+              Create Job Post
             </Link>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="rounded-2xl border border-[#e0dfdc] bg-white p-4 shadow-sm">
+        <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-center">
             <input
               type="text"
-              placeholder="Rechercher par titre, localisation ou type..."
+              placeholder="Search by title, location, or type..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0a66c2]/20 md:flex-1"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#0a66c2] focus:ring-4 focus:ring-[#0a66c2]/10 md:flex-1"
             />
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0a66c2]/20"
+              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#0a66c2] focus:ring-4 focus:ring-[#0a66c2]/10"
             >
-              <option value="all">Toutes les offres</option>
-              <option value="active">Actives</option>
-              <option value="inactive">Inactives</option>
+              <option value="all">All Jobs</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
             </select>
           </div>
         </div>
 
         {/* Content */}
         {loading ? (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-600">Chargement des offres...</p>
+          <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm text-slate-600">Loading job posts...</p>
           </div>
         ) : error ? (
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+          <div className="rounded-[28px] border border-red-200 bg-white p-6 shadow-sm">
             <p className="text-sm text-red-600">{error}</p>
           </div>
         ) : filteredJobs.length === 0 ? (
-          <div className="rounded-2xl border border-[#e0dfdc] bg-white p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Aucune offre trouvée
+          <div className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+            <h2 className="text-xl font-semibold text-slate-900">
+              No job posts found
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <p className="mt-2 text-sm leading-6 text-slate-600">
               {jobs.length === 0
-                ? "Votre entreprise n’a pas encore publié d’offre."
-                : "Aucune offre ne correspond à votre recherche ou au filtre sélectionné."}
+                ? "Your company has not published any job posts yet."
+                : "No job post matches your search or selected filter."}
             </p>
 
             {jobs.length === 0 ? (
               <Link
                 to="/employer/jobs/create"
-                className="mt-4 inline-flex rounded-xl bg-[#0a66c2] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
+                className="mt-5 inline-flex rounded-full bg-[#0a66c2] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#004182]"
               >
-                Publier votre première offre
+                Publish Your First Job
               </Link>
             ) : null}
           </div>

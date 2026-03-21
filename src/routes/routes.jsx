@@ -113,7 +113,7 @@ export default function AppRoutes() {
   <Route path="jobs/:jobId/shortlist" element={<EmployerShortlistPage />} />
 </Route>
 
-{/* ✅ AJOUT ICI */}
+{/* AJOUT ICI */}
 {AdminRoutes}
 
 {/* 403*/}
